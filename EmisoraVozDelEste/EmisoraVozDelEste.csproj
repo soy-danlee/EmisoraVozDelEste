@@ -134,6 +134,7 @@
     <Compile Include="Controllers\ComentariosController.cs" />
     <Compile Include="Controllers\CotizacionesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\NoticiasController.cs" />
     <Compile Include="Controllers\PatrocinadoresController.cs" />
     <Compile Include="Controllers\ProgramasController.cs" />
@@ -299,9 +300,11 @@
     <Content Include="Views\Programas\Details.cshtml" />
     <Content Include="Views\Programas\Edit.cshtml" />
     <Content Include="Views\Programas\Index.cshtml" />
+    <Content Include="Views\Login\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
