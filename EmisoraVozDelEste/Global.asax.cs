@@ -1,3 +1,4 @@
+using EmisoraVozDelEste.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,34 @@ namespace EmisoraVozDelEste
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            CargarProgramasIniciales();
+        }
+        private void CargarProgramasIniciales()
+        {
+            using (var db = new VozDelEsteEntities1())
+            {
+                if (!db.Programas.Any())
+                {
+                    var programa = new Programas
+                    {
+                        Nombre = "Hola",
+                        Imagen = "https://s1.significados.com/foto/futbol-intro-cke.jpg?class=article",
+                        Descripcion = "Descripcion aca",
+                        Dia = "Lunes a viernes",
+                        Hora = new TimeSpan(20, 0, 0)
+                    };
+                    db.Programas.Add(programa);
+                    db.SaveChanges();
+                }
+            }
         }
     }
 }
