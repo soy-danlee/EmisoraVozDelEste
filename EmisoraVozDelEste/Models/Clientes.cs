@@ -25,8 +25,10 @@ namespace EmisoraVozDelEste.Models
         public string Apellido { get; set; }
         public string Email { get; set; }
         public Nullable<System.DateTime> FechaNacimiento { get; set; }
+        public Nullable<int> UsuarioID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Comentarios> Comentarios { get; set; }
+        public virtual Usuarios Usuarios { get; set; }
     }
 }
