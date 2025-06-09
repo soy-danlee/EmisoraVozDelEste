@@ -30,7 +30,7 @@ namespace EmisoraVozDelEste
                     var programa = new Programas
                     {
                         Nombre = "Hola",
-                        Imagen = "https://s1.significados.com/foto/futbol-intro-cke.jpg?class=article",
+                        Imagen = "https://img.freepik.com/foto-gratis/balon-futbol-linea-blanca-estadio_1150-5285.jpg?semt=ais_items_boosted&w=740",
                         Descripcion = "Descripcion aca",
                         Dia = "Lunes a viernes",
                         Hora = new TimeSpan(20, 0, 0)

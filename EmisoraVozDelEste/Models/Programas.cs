@@ -11,7 +11,8 @@ namespace EmisoraVozDelEste.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Programas
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,10 +22,23 @@ namespace EmisoraVozDelEste.Models
         }
     
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "El nombre del programa es obligatorio")]
+        [StringLength(100)]
         public string Nombre { get; set; }
+
+        [Url(ErrorMessage = "Debe ser una URL válida")]
+        [Display(Name = "Imagen (URL)")]
         public string Imagen { get; set; }
+
+        [Required(ErrorMessage = "La descripción es obligatoria")]
+        [StringLength(500)]
         public string Descripcion { get; set; }
+
+        [Required(ErrorMessage = "El día es obligatorio")]
+        [Display(Name = "Día de emisión")]
         public string Dia { get; set; }
+        [Display(Name = "Hora de emisión")]
         public Nullable<System.TimeSpan> Hora { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
