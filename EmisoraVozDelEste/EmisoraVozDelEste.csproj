@@ -301,6 +301,7 @@
     <Content Include="Views\Programas\Edit.cshtml" />
     <Content Include="Views\Programas\Index.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
+    <Content Include="Views\Login\AccesoDenegado.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

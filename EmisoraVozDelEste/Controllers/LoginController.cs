@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EmisoraVozDelEste.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,24 +9,43 @@ namespace EmisoraVozDelEste.Controllers
 {
     public class LoginController : Controller
     {
-        // GET: Account/Login
+        private VozDelEsteEntities1 db = new VozDelEsteEntities1();
+
+        // GET: Login
         public ActionResult Login()
         {
             return View();
         }
 
-        // POST: Account/Login
+        // POST: Login
         [HttpPost]
         public ActionResult Login(string username, string password)
         {
-            // Aquí pondrás la lógica de autenticación
-            if (username == "admin" && password == "1234")
+            using (var db = new VozDelEsteEntities1())
             {
-                ViewBag.Message = "Inicio de sesión exitoso.";
-                return RedirectToAction("Index", "Home");
-            }
+                var usuario = db.Usuarios.Include("Roles").FirstOrDefault(u => u.Nombre == username && u.Contraseña == password);
 
-            ViewBag.Message = "Usuario o contraseña incorrectos.";
+                if (usuario != null)
+                {
+                    Session["UsuarioNombre"] = usuario.Nombre;
+                    Session["Rol"] = usuario.Roles.Nombre;
+
+                    return RedirectToAction("Index", "Home");
+                }
+
+                ViewBag.Message = "Usuario o contraseña incorrectos.";
+                return View();
+            }
+        }
+
+        public ActionResult Logout()
+        {
+            Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult AccesoDenegado()
+        {
             return View();
         }
     }

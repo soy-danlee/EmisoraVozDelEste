@@ -38,6 +38,12 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Programas/Create
         public ActionResult Create()
         {
+            // Validar si el usuario tiene rol de Administrador
+            if (Session["Rol"] == null || Session["Rol"].ToString() != "Administrador")
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
+
             return View();
         }
 
@@ -46,21 +52,30 @@ namespace EmisoraVozDelEste.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nombre,Imagen,Descripcion,Dia,Hora")] Programas programas)
+        public ActionResult Create(Programas programa)
         {
+            if (Session["Rol"] == null || Session["Rol"].ToString() != "Administrador")
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
+
             if (ModelState.IsValid)
             {
-                db.Programas.Add(programas);
+                db.Programas.Add(programa);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(programas);
+            return View(programa);
         }
 
         // GET: Programas/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (Session["Rol"] == null || Session["Rol"].ToString() != "Administrador")
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -80,6 +95,7 @@ namespace EmisoraVozDelEste.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Nombre,Imagen,Descripcion,Dia,Hora")] Programas programas)
         {
+
             if (ModelState.IsValid)
             {
                 db.Entry(programas).State = EntityState.Modified;
@@ -92,6 +108,10 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Programas/Delete/5
         public ActionResult Delete(int? id)
         {
+            if (Session["Rol"] == null || Session["Rol"].ToString() != "Administrador")
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -109,6 +129,10 @@ namespace EmisoraVozDelEste.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if (Session["Rol"] == null || Session["Rol"].ToString() != "Administrador")
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             Programas programas = db.Programas.Find(id);
             db.Programas.Remove(programas);
             db.SaveChanges();

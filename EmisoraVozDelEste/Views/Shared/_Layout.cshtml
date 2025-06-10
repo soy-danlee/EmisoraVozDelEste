@@ -52,16 +52,32 @@
                         @Html.ActionLink("Inicio", "Index", "Home", null, new { @class = "nav-link custom-link" })
                     </li>
                     <li class="nav-item">
-                        @Html.ActionLink("Acerca de", "About", "Home", null, new { @class = "nav-link custom-link" })
-                    </li>
-                    <li class="nav-item">
                         @Html.ActionLink("Clientes", "Index", "Clientes", null, new { @class = "nav-link custom-link" })
                     </li>
                     <li class="nav-item">
-                        @Html.ActionLink("Iniciar Sesión", "Login", "Login", null, new { @class = "nav-link custom-link" })
-                    <li class="nav-item">
                         @Html.ActionLink("Programas", "Index", "Programas", null, new { @class = "nav-link custom-link" })
                     </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Acerca de", "About", "Home", null, new { @class = "nav-link custom-link" })
+                    </li>
+                    @if (Session["UsuarioNombre"] != null)
+                    {
+                        <li class="nav-item">
+                            <span class="nav-link text-white">
+                                <i class="fas fa-user me-1"></i>
+                                Hola, @Session["UsuarioNombre"] (@Session["Rol"])
+                            </span>
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Cerrar sesión", "Logout", "Login", null, new { @class = "nav-link text-danger" })
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink("Iniciar sesión", "Login", "Login", null, new { @class = "nav-link custom-link" })
+                        </li>
+                    }
 
                 </ul>
             </div>
