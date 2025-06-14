@@ -33,16 +33,35 @@
             border: none !important;
         }
 
-            .custom-dropdown a {
-                color: white !important;
-                transition: background-color 0.3s;
+        .custom-dropdown a {
+            color: white !important;
+            transition: background-color 0.3s;
+        }
+
+       .custom-dropdown a:hover {
+            background-color: #1e90ff !important;
+            color: white;
+       }
+
+        .tarjeta-hover {
+            transition: all 0.3s ease;
+        }
+
+            .tarjeta-hover:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
             }
 
-                .custom-dropdown a:hover {
-                    background-color: #1e90ff !important;
-                    color: white;
-                }
+        .tarjeta-img-top {
+            transition: filter 0.3s ease;
+        }
+
+        .tarjeta-hover:hover .tarjeta-img-top {
+            filter: brightness(85%);
+        }
+
     </style>
+    
 
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -118,7 +137,7 @@
                     }
 
                 </ul>
-        </div>
+            </div>
         </div>
     </nav>
     <div class="container body-content">

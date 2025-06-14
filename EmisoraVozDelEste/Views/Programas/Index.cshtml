@@ -72,17 +72,20 @@
     @foreach (var programa in Model)
     {
         <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <img src="@programa.Imagen" class="card-img-top" alt="@programa.Nombre" style="height: 200px; object-fit: cover;">
-                <div class="card-body">
-                    <h5 class="card-title">@programa.Nombre</h5>
-                    <p class="card-text">@programa.Descripcion</p>
+            <a href="@Url.Action("Sala", "Programas", new { id = programa.Id })" class="text-decoration-none text-dark">
+                <div class="card tarjeta-hover h-100 shadow-sm">
+                    <img src="@programa.Imagen" class="tarjeta-img-top card-img-top" alt="@programa.Nombre" style="height: 200px; object-fit: cover;">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@programa.Nombre</h5>
+                        <p class="card-text flex-grow-1">@programa.Descripcion</p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <strong>Día:</strong> @programa.Dia <br />
+                        <strong>Hora:</strong> @(programa.Hora.HasValue ? programa.Hora.Value.ToString(@"hh\:mm") : "")
+                    </div>
                 </div>
-                <div class="card-footer text-muted">
-                    <strong>Día:</strong> @programa.Dia <br />
-                    <strong>Hora:</strong> @(programa.Hora.HasValue ? programa.Hora.Value.ToString(@"hh\:mm") : "")
-                </div>
-            </div>
+            </a>
         </div>
+
     }
 </div>

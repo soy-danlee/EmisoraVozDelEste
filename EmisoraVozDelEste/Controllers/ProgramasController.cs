@@ -38,7 +38,6 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Programas/Create
         public ActionResult Create()
         {
-            // Validar si el usuario tiene rol de Administrador
             if (Session["Rol"] == null || Session["Rol"].ToString() != "Administrador")
             {
                 return RedirectToAction("AccesoDenegado", "Login");
@@ -146,6 +145,17 @@ namespace EmisoraVozDelEste.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult Sala(int id)
+        {
+            var programa = db.Programas.Find(id);
+            if (programa == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(programa);
         }
     }
 }
