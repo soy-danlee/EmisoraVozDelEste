@@ -22,6 +22,9 @@ namespace EmisoraVozDelEste.Models
     
         public int Id { get; set; }
         public string Nombre { get; set; }
+        public bool PuedeVerDropdown { get; set; }
+        public bool PuedeEditar { get; set; }
+        public bool PuedeEliminar { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Usuarios> Usuarios { get; set; }

@@ -11,8 +11,7 @@ namespace EmisoraVozDelEste.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Clientes
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -20,29 +19,11 @@ namespace EmisoraVozDelEste.Models
         {
             this.Comentarios = new HashSet<Comentarios>();
         }
-
-        [Required(ErrorMessage = "La cédula es obligatoria")]
-        [RegularExpression(@"^\d{7,8}$", ErrorMessage = "La cédula debe tener 7 u 8 dígitos")]
-        [Display(Name = "Cédula")]
+    
         public int CI { get; set; }
-
-        [Required(ErrorMessage = "El nombre es obligatorio")]
-        [StringLength(100, ErrorMessage = "El nombre no puede superar los 50 caracteres")]
-        [Display(Name = "Nombre")]
         public string Nombre { get; set; }
-
-        [Required(ErrorMessage = "El apellido es obligatorio")]
-        [StringLength(100)]
-        [Display(Name = "Apellido")]
         public string Apellido { get; set; }
-
-        [EmailAddress(ErrorMessage = "Debe ser un email válido")]
-        [Display(Name = "Correo electrónico")]
         public string Email { get; set; }
-
-        [Required(ErrorMessage = "La fecha de nacimiento es obligatoria")]
-        [DataType(DataType.Date)]
-        [Display(Name = "Fecha de nacimiento")]
         public Nullable<System.DateTime> FechaNacimiento { get; set; }
         public Nullable<int> UsuarioID { get; set; }
     

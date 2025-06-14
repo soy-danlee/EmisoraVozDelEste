@@ -4,47 +4,37 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header text-white" style="background-color: #0a1a2f;">
+                    <h4 class="mb-0"><i class="fas fa-user me-2"></i> Detalles del Cliente</h4>
+                </div>
+                <div class="card-body">
 
-<div>
-    <h4>Clientes</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
+                    <dl class="row">
+                        <dt class="col-sm-4">Nombre:</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Nombre)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
+                        <dt class="col-sm-4">Apellido:</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Apellido)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Apellido)
-        </dt>
+                        <dt class="col-sm-4">Email:</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Email)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Apellido)
-        </dd>
+                        <dt class="col-sm-4">Fecha de Nacimiento:</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.FechaNacimiento)</dd>
+                    </dl>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
+                    <div class="d-grid d-md-flex gap-2 mt-4">
+                        @Html.ActionLink("Editar", "Edit", new { id = Model.CI }, new { @class = "btn btn-warning btn-sm" })
+                        @Html.ActionLink("Volver a la Lista", "Index", null, new { @class = "btn text-white btn-sm", style = "background-color: #0a1a2f;" })
+                    </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.FechaNacimiento)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FechaNacimiento)
-        </dd>
-
-    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.CI }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+

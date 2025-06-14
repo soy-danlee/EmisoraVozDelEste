@@ -1,0 +1,31 @@
+﻿@model List<EmisoraVozDelEste.Models.Permisos>
+@{
+    ViewBag.Title = "Panel de Permisos";
+}
+
+<h2>Panel de Permisos</h2>
+
+
+@using (Html.BeginForm("GuardarPermisos", "Permisos", FormMethod.Post))
+{
+    foreach (var permiso in Model)
+    {
+        var isDisabled = permiso.Roles.Nombre == "Administrador" ? "disabled" : "";
+
+        <div class="form-check">
+            <input type="checkbox"
+                   name="PermisosSeleccionados"
+                   value="@permiso.Id"
+                   id="permiso_@permiso.Id"
+                   @(permiso.PuedeVerDropdown ? "checked=\"checked\"" : "")
+                   @(permiso.Roles.Nombre == "Administrador" ? "disabled" : "") />
+
+            <label class="form-check-label" for="permiso_@permiso.Id">
+                @permiso.Roles.Nombre
+            </label>
+        </div>
+    }
+
+    <br />
+    <button type="submit" class="btn btn-primary">Guardar Permisos</button>
+}

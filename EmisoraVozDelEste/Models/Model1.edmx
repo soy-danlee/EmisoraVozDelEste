@@ -81,6 +81,9 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PuedeVerDropdown" Type="bit" Nullable="false" />
+          <Property Name="PuedeEditar" Type="bit" Nullable="false" />
+          <Property Name="PuedeEliminar" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Usuarios">
           <Key>
@@ -253,6 +256,9 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Usuarios" Relationship="Self.FK__Usuarios__RolId__4BAC3F29" FromRole="Roles" ToRole="Usuarios" />
+          <Property Name="PuedeVerDropdown" Type="Boolean" Nullable="false" />
+          <Property Name="PuedeEditar" Type="Boolean" Nullable="false" />
+          <Property Name="PuedeEliminar" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Usuarios">
           <Key>
@@ -427,6 +433,9 @@
           <EntitySetMapping Name="Roles">
             <EntityTypeMapping TypeName="VozDelEsteModel.Roles">
               <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="PuedeEliminar" ColumnName="PuedeEliminar" />
+                <ScalarProperty Name="PuedeEditar" ColumnName="PuedeEditar" />
+                <ScalarProperty Name="PuedeVerDropdown" ColumnName="PuedeVerDropdown" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
               </MappingFragment>
