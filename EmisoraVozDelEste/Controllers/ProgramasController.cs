@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using EmisoraVozDelEste.Models;
+using System.Globalization;
+
 
 namespace EmisoraVozDelEste.Controllers
 {
@@ -15,10 +17,27 @@ namespace EmisoraVozDelEste.Controllers
         private VozDelEsteEntities1 db = new VozDelEsteEntities1();
 
         // GET: Programas
+
         public ActionResult Index()
         {
-            return View(db.Programas.ToList());
+            var programas = db.Programas.ToList();
+
+            var ahora = DateTime.Now;
+            string diaHoy = ahora.ToString("dddd", new CultureInfo("es-ES"));
+            TimeSpan horaActual = ahora.TimeOfDay;
+
+            var programaActual = programas.FirstOrDefault(p =>
+                p.Dia.ToLower().Contains(diaHoy.ToLower())
+                && p.Hora.HasValue
+                && horaActual >= p.Hora.Value
+                && horaActual < p.Hora.Value.Add(TimeSpan.FromHours(1)) // ACA EL CODIGO SUPONE QUE EL PROGRAMA DURA 1 HORA
+            );
+
+            ViewBag.ProgramaActual = programaActual;
+            return View(programas);
         }
+
+
 
         // GET: Programas/Details/5
         public ActionResult Details(int? id)
@@ -157,5 +176,34 @@ namespace EmisoraVozDelEste.Controllers
 
             return View(programa);
         }
+
+        public Programas ObtenerProgramaActual()
+        {
+            var ahora = DateTime.Now;
+            string diaHoy = ahora.ToString("dddd", new CultureInfo("es-ES")); // toma el dia actual
+            TimeSpan horaActual = ahora.TimeOfDay;
+
+            var programas = db.Programas.ToList();
+
+            foreach (var p in programas)
+            {
+                if (p.Dia.Contains(diaHoy) && p.Hora.HasValue)
+                {
+                    var horaInicio = p.Hora.Value;
+                    var horaFin = horaInicio.Add(TimeSpan.FromHours(1)); 
+
+                    if (horaActual >= horaInicio && horaActual < horaFin)
+                    {
+                        return p;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+
+
+
     }
 }
