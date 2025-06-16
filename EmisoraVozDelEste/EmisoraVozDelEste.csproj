@@ -311,6 +311,7 @@
     <Content Include="Scripts\jquery-3.7.1.min.map" />
     <Content Include="Views\Sala.cshtml" />
     <Content Include="Views\Programas\Sala.cshtml" />
+    <Content Include="Views\Noticias\NoticiasCliente.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

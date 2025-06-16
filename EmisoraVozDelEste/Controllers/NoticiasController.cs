@@ -123,5 +123,22 @@ namespace EmisoraVozDelEste.Controllers
             }
             base.Dispose(disposing);
         }
+
+        public ActionResult NoticiasCliente()
+        {
+            var noticias = db.Noticias.OrderByDescending(n => n.FechaPublicacion).ToList();
+            return View(noticias);
+        }
+
+        public ActionResult Detalle(int id)
+        {
+            var noticia = db.Noticias.Find(id);
+            if (noticia == null)
+            {
+                return HttpNotFound();
+            }
+            return View(noticia);
+        }
+
     }
 }
