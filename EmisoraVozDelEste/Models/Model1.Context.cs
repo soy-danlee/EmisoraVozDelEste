@@ -34,5 +34,6 @@ namespace EmisoraVozDelEste.Models
         public virtual DbSet<Programas> Programas { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<Usuarios> Usuarios { get; set; }
+        public virtual DbSet<Conductores> Conductores { get; set; }
     }
 }

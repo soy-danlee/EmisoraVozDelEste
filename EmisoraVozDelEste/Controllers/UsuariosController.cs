@@ -62,6 +62,7 @@ namespace EmisoraVozDelEste.Controllers
         }
 
         // GET: Usuarios/Edit/5
+        
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -69,12 +70,18 @@ namespace EmisoraVozDelEste.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Usuarios usuarios = db.Usuarios.Find(id);
+            
             if (usuarios == null)
             {
                 return HttpNotFound();
             }
             ViewBag.RolId = new SelectList(db.Roles, "Id", "Nombre", usuarios.RolId);
+            
             return View(usuarios);
+           
+            
+
+            
         }
 
         // POST: Usuarios/Edit/5

@@ -46,7 +46,7 @@ namespace EmisoraVozDelEste.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nombre")] Roles roles)
+        public ActionResult Create([Bind(Include = "Id,Nombre,PuedeVerDropdown,PuedeEditar,PuedeEliminar")] Roles roles)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +78,7 @@ namespace EmisoraVozDelEste.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nombre")] Roles roles)
+        public ActionResult Edit([Bind(Include = "Id,Nombre,PuedeVerDropdown,PuedeEditar,PuedeEliminar")] Roles roles)
         {
             if (ModelState.IsValid)
             {

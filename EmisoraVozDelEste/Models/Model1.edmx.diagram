@@ -18,6 +18,8 @@
         <AssociationConnector Association="VozDelEsteModel.FK__Comentari__Progr__59FA5E80" ManuallyRouted="false" />
         <AssociationConnector Association="VozDelEsteModel.FK__Usuarios__RolId__4BAC3F29" ManuallyRouted="false" />
         <AssociationConnector Association="VozDelEsteModel.FK_Clientes_Usuarios" />
+        <EntityTypeShape EntityType="VozDelEsteModel.Conductores" Width="1.5" PointX="3" PointY="8.25" />
+        <AssociationConnector Association="VozDelEsteModel.FK__Conductor__Progr__5535A963" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

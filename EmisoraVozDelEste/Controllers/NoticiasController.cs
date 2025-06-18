@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using EmisoraVozDelEste.Models;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace EmisoraVozDelEste.Controllers
 {
@@ -36,6 +38,7 @@ namespace EmisoraVozDelEste.Controllers
         }
 
         // GET: Noticias/Create
+        [Authorize( Roles = "Administrador")]
         public ActionResult Create()
         {
             return View();
