@@ -1,0 +1,25 @@
+﻿@using System.Globalization;
+
+@model List<EmisoraVozDelEste.Models.Api.List>
+@{
+    ViewBag.Title = "Clima en Maldonado";
+}
+
+<h2 class="mb-4 text-center">Clima en @ViewBag.Ciudad</h2>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h5>@item.DtTxt.ToString("dddd dd MMM", new CultureInfo("es-UY"))</h5>
+                    <img src="@($"https://openweathermap.org/img/wn/{item.Weather[0].Icon}@2x.png")" alt="icono clima" />
+                    <p><strong>@item.Weather[0].Description</strong></p>
+                    <p>🌡 Temp: @item.Main.Temp °C</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

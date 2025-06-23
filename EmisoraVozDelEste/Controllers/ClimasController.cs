@@ -4,15 +4,44 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.NetworkInformation;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using EmisoraVozDelEste.Models;
+using EmisoraVozDelEste.Models.Api;
+using System.Globalization;
 
 namespace EmisoraVozDelEste.Controllers
 {
     public class ClimasController : Controller
     {
         private VozDelEsteEntities1 db = new VozDelEsteEntities1();
+
+        public ActionResult ClimaOnlineVista()
+        {
+            string apiKey = "99a62615b949cb6d8a96f76f97c2ff69";
+            string ciudad = "Maldonado,UY";
+            string url = $"https://api.openweathermap.org/data/2.5/forecast?q={ciudad}&appid={apiKey}&units=metric&lang=es";
+
+            using (var client = new WebClient())
+            {
+                string json = client.DownloadString(url);
+                var clima = ClimaOnline.FromJson(json);
+
+                // Filtrar para quedarte con 1 pronóstico por día (por ejemplo a las 12:00)
+                var diarios = clima.List
+                    .Where(x => x.DtTxt.Hour == 12)
+                    .GroupBy(x => x.DtTxt.Date)
+                    .Select(g => g.First())
+                    .Take(5)
+                    .ToList();
+
+                ViewBag.Ciudad = clima.City.Name;
+                return View("ClimaOnline", diarios); // pasamos solo la lista filtrada
+            }
+        }
 
         // GET: Climas
         public ActionResult Index()
@@ -123,5 +152,6 @@ namespace EmisoraVozDelEste.Controllers
             }
             base.Dispose(disposing);
         }
+
     }
 }
