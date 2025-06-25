@@ -8,6 +8,58 @@
     <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
 
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to bottom right, #081933, #b1c2d4); /* azul claro a celeste */
+            /*background: linear-gradient(to bottom right, #081933, #b1c2d4);*/ /* azul claro a celeste */
+
+            color: #003366; /* azul oscuro para el texto */
+        }
+
+        header {
+            background-color: #004080; /* azul intenso */
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 2em;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        main {
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.8); /* fondo blanco semitransparente */
+            margin: 40px 5%;
+            max-width: 900px;
+           
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 50, 0.1);
+        }
+
+        a {
+            color: #0055aa;
+            text-decoration: none;
+        }
+
+            a:hover {
+                text-decoration: underline;
+            }
+
+        footer {
+            background-color: #0a1a2f;
+            color: #ffffff;
+            text-align: center;
+            padding: 15px;
+            margin-top: 60px;
+            
+        }
+    
+        .layout-margen{
+            margin: 0px;
+
+        }
+        
         .custom-navbar {
             background-color: #0a1a2f; /* Azul muy oscuro */
         }
@@ -75,6 +127,10 @@
         .noticia-hover:hover .noticia-img-top {
             filter: brightness(85%);
         }
+
+       
+        
+
     </style>
     
 
@@ -160,13 +216,16 @@
             </div>
         </div>
     </nav>
-    <div class="container body-content">
+    <div class="layout-margen">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Mi aplicación ASP.NET</p>
-        </footer>
+
     </div>
+    
+
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Mi aplicación ASP.NET</p>
+    </footer>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
