@@ -319,6 +319,7 @@
     <Content Include="Views\Programas\Sala.cshtml" />
     <Content Include="Views\Noticias\NoticiasCliente.cshtml" />
     <Content Include="Views\Climas\ClimaOnline.cshtml" />
+    <Content Include="Views\Cotizaciones\CotizacionesOnline.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

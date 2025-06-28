@@ -1,18 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using EmisoraVozDelEste.Models;
+using Newtonsoft.Json;
+using System.Data.Entity;
 
 namespace EmisoraVozDelEste.Controllers
 {
     public class CotizacionesController : Controller
     {
         private VozDelEsteEntities1 db = new VozDelEsteEntities1();
+        private readonly string apiKey = "60a82924e27eb538ce21c6a1568f779b";
+
+        public async Task<ActionResult> CotizacionesOnline()
+        {
+            string url = $"http://api.currencylayer.com/live?access_key={apiKey}&currencies=UYU,EUR,ARS&source=USD&format=1";
+
+            using (HttpClient client = new HttpClient())
+            {
+                var response = await client.GetStringAsync(url);
+                var apiResult = JsonConvert.DeserializeObject<CurrencyApiResponse>(response);
+
+                if (!apiResult.Success)
+                {
+                    return Content("Error al obtener cotizaciones.");
+                }
+
+                var cotizaciones = apiResult.Quotes.Select(q => new Cotizaciones
+                {
+                    Fecha = DateTime.Now,
+                    TipoMoneda = q.Key,
+                    Valor = q.Value
+                }).ToList();
+
+                foreach (var coti in cotizaciones)
+                {
+                    db.Cotizaciones.Add(coti);
+                }
+                db.SaveChanges();
+
+                return View(cotizaciones);
+            }
+        }
 
         // GET: Cotizaciones
         public ActionResult Index()
@@ -24,14 +57,12 @@ namespace EmisoraVozDelEste.Controllers
         public ActionResult Details(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             Cotizaciones cotizaciones = db.Cotizaciones.Find(id);
             if (cotizaciones == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(cotizaciones);
         }
 
@@ -42,8 +73,6 @@ namespace EmisoraVozDelEste.Controllers
         }
 
         // POST: Cotizaciones/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
-        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Fecha,TipoMoneda,Valor")] Cotizaciones cotizaciones)
@@ -62,20 +91,16 @@ namespace EmisoraVozDelEste.Controllers
         public ActionResult Edit(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             Cotizaciones cotizaciones = db.Cotizaciones.Find(id);
             if (cotizaciones == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(cotizaciones);
         }
 
         // POST: Cotizaciones/Edit/5
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
-        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Fecha,TipoMoneda,Valor")] Cotizaciones cotizaciones)
@@ -93,14 +118,12 @@ namespace EmisoraVozDelEste.Controllers
         public ActionResult Delete(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             Cotizaciones cotizaciones = db.Cotizaciones.Find(id);
             if (cotizaciones == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(cotizaciones);
         }
 
@@ -118,10 +141,16 @@ namespace EmisoraVozDelEste.Controllers
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 db.Dispose();
-            }
             base.Dispose(disposing);
+        }
+
+        // Clase auxiliar interna
+        private class CurrencyApiResponse
+        {
+            public bool Success { get; set; }
+            public string Source { get; set; }
+            public Dictionary<string, decimal> Quotes { get; set; }
         }
     }
 }
