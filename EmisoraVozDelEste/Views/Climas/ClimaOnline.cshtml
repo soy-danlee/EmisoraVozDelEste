@@ -1,25 +1,61 @@
-﻿@using System.Globalization;
+﻿@using System.Globalization
+@model EmisoraVozDelEste.Models.Api.ClimaViewModel
 
-@model List<EmisoraVozDelEste.Models.Api.List>
 @{
-    ViewBag.Title = "Clima en Maldonado";
+    ViewBag.Title = "Clima en " + Model.Ciudad;
 }
 
-<h2 class="mb-4 text-center">Clima en @ViewBag.Ciudad</h2>
+<h2 class="text-center mb-4">Clima en @Model.Ciudad</h2>
 
-<div class="row">
-    @foreach (var item in Model)
+<!-- Clima actual -->
+<div class="card mb-5 mx-auto shadow-sm" style="max-width: 500px;">
+    <div class="card-body text-center">
+        <h4>Ahora</h4>
+        <img src="@($"https://openweathermap.org/img/wn/{Model.Actual.Weather[0].Icon}@2x.png")" alt="icono actual" />
+        <p><strong>@Model.Actual.Weather[0].Description</strong></p>
+        <p>🌡 Temp: @Model.Actual.Main.Temp °C</p>
+        <p>💨 Viento: @Model.Actual.Wind.Speed km/h</p>
+        <p><small>@Model.Actual.Fecha.ToString("dddd dd MMMM, HH:mm", new CultureInfo("es-UY"))</small></p>
+    </div>
+</div>
+
+@if (Model.BloquesHoy.Any())
+{
+    <h4 class="text-center mb-3">Hoy más tarde</h4>
+    <div class="row mb-5">
+        @foreach (var item in Model.BloquesHoy)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <h6>@item.DtTxt.ToString("HH:mm")</h6>
+                        <img src="@($"https://openweathermap.org/img/wn/{item.Weather[0].Icon}@2x.png")" alt="icono clima" />
+                        <p><strong>@item.Weather[0].Description</strong></p>
+                        <p>🌡 @item.Main.Temp °C</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<!-- Pronóstico -->
+<h4 class="text-center">Próximos días</h4>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-4">
+    @foreach (var item in Model.Pronostico)
     {
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-body text-center">
-                    <h5>@item.DtTxt.ToString("dddd dd MMM", new CultureInfo("es-UY"))</h5>
-                    <img src="@($"https://openweathermap.org/img/wn/{item.Weather[0].Icon}@2x.png")" alt="icono clima" />
-                    <p><strong>@item.Weather[0].Description</strong></p>
-                    <p>🌡 Temp: @item.Main.Temp °C</p>
+        <div class="col">
+            <div class="card h-100 text-center shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title">@item.DtTxt.ToString("ddd dd MMM", new CultureInfo("es-UY"))</h6>
+                    <img src="@($"https://openweathermap.org/img/wn/{item.Weather[0].Icon}@2x.png")" class="mb-2" />
+                    <p class="mb-1"><strong>@item.Weather[0].Description</strong></p>
+                    <p class="mb-0">🌡 @item.Main.Temp °C</p>
+                    <small class="text-muted">@item.DtTxt.ToString("HH:mm")</small>
                 </div>
             </div>
         </div>
     }
 </div>
+
 

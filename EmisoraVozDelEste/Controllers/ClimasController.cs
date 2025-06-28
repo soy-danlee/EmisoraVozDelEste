@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using EmisoraVozDelEste.Models;
 using EmisoraVozDelEste.Models.Api;
 using System.Globalization;
+using Newtonsoft.Json;
 
 namespace EmisoraVozDelEste.Controllers
 {
@@ -23,14 +24,29 @@ namespace EmisoraVozDelEste.Controllers
         {
             string apiKey = "99a62615b949cb6d8a96f76f97c2ff69";
             string ciudad = "Maldonado,UY";
-            string url = $"https://api.openweathermap.org/data/2.5/forecast?q={ciudad}&appid={apiKey}&units=metric&lang=es";
+
+            // URLs de OpenWeather
+            string urlActual = $"https://api.openweathermap.org/data/2.5/weather?q={ciudad}&appid={apiKey}&units=metric&lang=es";
+            string urlPronostico = $"https://api.openweathermap.org/data/2.5/forecast?q={ciudad}&appid={apiKey}&units=metric&lang=es";
 
             using (var client = new WebClient())
             {
-                string json = client.DownloadString(url);
-                var clima = ClimaOnline.FromJson(json);
+                // Clima actual
+                string jsonActual = client.DownloadString(urlActual);
+                var climaActual = JsonConvert.DeserializeObject<ClimaActual>(jsonActual);
 
-                // Filtrar para quedarte con 1 pronóstico por día (por ejemplo a las 12:00)
+                // Pronóstico 5 días
+                string jsonPronostico = client.DownloadString(urlPronostico);
+                var clima = ClimaOnline.FromJson(jsonPronostico);
+
+                var hoy = DateTime.Now.Date;
+
+                // Pronóstico del día actual (hoy), luego del momento actual
+                var bloquesHoy = clima.List
+                    .Where(x => x.DtTxt.Date == hoy && x.DtTxt > DateTime.Now)
+                    .Take(3) // Mostramos solo los próximos 3 bloques
+                    .ToList();
+
                 var diarios = clima.List
                     .Where(x => x.DtTxt.Hour == 12)
                     .GroupBy(x => x.DtTxt.Date)
@@ -38,10 +54,18 @@ namespace EmisoraVozDelEste.Controllers
                     .Take(5)
                     .ToList();
 
-                ViewBag.Ciudad = clima.City.Name;
-                return View("ClimaOnline", diarios); // pasamos solo la lista filtrada
+                var modelo = new ClimaViewModel
+                {
+                    Actual = climaActual,
+                    Pronostico = diarios,
+                    BloquesHoy = bloquesHoy,
+                    Ciudad = clima.City.Name
+                };
+
+                return View("ClimaOnline", modelo);
             }
         }
+
 
         // GET: Climas
         public ActionResult Index()
