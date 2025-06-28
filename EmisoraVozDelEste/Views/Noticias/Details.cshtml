@@ -1,50 +1,33 @@
 ﻿@model EmisoraVozDelEste.Models.Noticias
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = Model.Titulo;
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
 }
 
-<h2>Details</h2>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <article class="bg-white shadow-sm p-4 rounded">
 
-<div>
-    <h4>Noticias</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Titulo)
-        </dt>
+                <h1 class="display-5 mb-3">@Model.Titulo</h1>
 
-        <dd>
-            @Html.DisplayFor(model => model.Titulo)
-        </dd>
+                <img src="@Model.Imagen" alt="@Model.Titulo" class="img-fluid rounded mb-4"
+                     style="max-height: 450px; object-fit: cover; width: 100%;" />
+               
+                <div class="fs-5 lh-lg" style="white-space: pre-line;">
+                    @Model.Contenido
+                </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Contenido)
-        </dt>
+                <div class="mt-4">
+                    <a href="@Url.Action("NoticiasCliente", "Noticias")" class="btn btn-outline-secondary">
+                        ← Volver a noticias
+                    </a>
+                </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.Contenido)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.FechaPublicacion)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FechaPublicacion)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Imagen)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Imagen)
-        </dd>
-
-    </dl>
+            </article>
+        </div>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+

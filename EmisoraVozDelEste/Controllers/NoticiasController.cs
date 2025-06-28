@@ -23,18 +23,14 @@ namespace EmisoraVozDelEste.Controllers
         }
 
         // GET: Noticias/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Noticias noticias = db.Noticias.Find(id);
-            if (noticias == null)
+            var noticia = db.Noticias.Find(id);
+            if (noticia == null)
             {
                 return HttpNotFound();
             }
-            return View(noticias);
+            return View(noticia);  
         }
 
         // GET: Noticias/Create
@@ -127,10 +123,21 @@ namespace EmisoraVozDelEste.Controllers
             base.Dispose(disposing);
         }
 
-        public ActionResult NoticiasCliente()
+        public ActionResult NoticiasCliente(string busqueda)
         {
-            var noticias = db.Noticias.OrderByDescending(n => n.FechaPublicacion).ToList();
-            return View(noticias);
+            var noticias = db.Noticias.AsQueryable(); // o List<Noticias>
+
+            if (!string.IsNullOrEmpty(busqueda))
+            {
+                noticias = noticias
+                    .Where(n => n.Titulo.Contains(busqueda));
+            }
+
+            var lista = noticias
+                .OrderByDescending(n => n.FechaPublicacion)
+                .ToList();
+
+            return View(lista);
         }
 
         public ActionResult Detalle(int id)
