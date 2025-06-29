@@ -146,6 +146,7 @@
     <Compile Include="Models\Api\ClimaActual.cs" />
     <Compile Include="Models\Api\ClimaOnline.cs" />
     <Compile Include="Models\Api\ClimaViewModel.cs" />
+    <Compile Include="Models\Api\HomePageViewModel.cs" />
     <Compile Include="Models\Clientes.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
