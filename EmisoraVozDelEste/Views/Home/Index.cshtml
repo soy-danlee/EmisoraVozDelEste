@@ -109,9 +109,15 @@
                 <div class="mt-4">
                     <h4>🗞️ Últimas Noticias</h4>
                     <ul class="list-group">
-                        <li class="list-group-item">Noticia destacada 1</li>
-                        <li class="list-group-item">Noticia destacada 2</li>
-                        <li class="list-group-item">Noticia destacada 3</li>
+                        @foreach (var noticia in Model.UltimasNoticias)
+                        {
+                            <li class="list-group-item">
+                                <a href="@Url.Action("Details", "Noticias", new { id = noticia.Id })" style="text-decoration: none;">
+                                    <strong>@noticia.Titulo</strong>
+                                    <span class="text-muted float-end">@noticia.FechaPublicacion?.ToString("dd MMM")</span>
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
 
@@ -239,12 +245,30 @@
                 </div>
                 <!-- Programación Próxima -->
                 <div class="mt-4">
-                    <h4>📆 Programación de las Próximas Horas</h4>
-                    <ul class="list-group">
-                        <li class="list-group-item">20:00 - Programa Cultural</li>
-                        <li class="list-group-item">21:00 - Noticias del Día</li>
-                        <li class="list-group-item">22:00 - Música en Vivo</li>
-                    </ul>
+                    <h4>📻 Próximos Programas de Hoy</h4>
+                    @if (!Model.ProximosProgramas.Any())
+                    {
+                        <div class="alert alert-info mt-3">
+                            No hay más programas para el resto del día.
+                        </div>
+                    }
+                    <div class="row">
+                        @foreach (var programa in Model.ProximosProgramas)
+                        {
+                            <div class="col-md-4 mb-3">
+                                <div class="card shadow-sm h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@programa.Nombre</h5>
+                                        <p class="card-text">@programa.Descripcion</p>
+                                        <p class="card-text text-muted">
+                                            🕒  @(programa.Hora?.ToString("hh\\:mm"))
+                                        </p>
+                                        <a href="@Url.Action("Details", "Programas", new { id = programa.Id })" class="btn btn-sm btn-outline-primary">Ver más</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
                 </div>
 
             </div>

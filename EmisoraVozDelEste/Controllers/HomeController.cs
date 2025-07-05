@@ -49,7 +49,7 @@ namespace EmisoraVozDelEste.Controllers
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 modelo.ClimaSidebar = null;
             }
@@ -68,7 +68,39 @@ namespace EmisoraVozDelEste.Controllers
                 modelo.Cotizaciones = new List<Cotizaciones>();
             }
 
+            // --- Últimas Noticias ---
+            modelo.UltimasNoticias = db.Noticias
+                .OrderByDescending(n => n.FechaPublicacion)
+                .Take(3)
+                .ToList();
+
+            // --- Próximos Programas de Hoy ---
+            var diaActual = ObtenerDiaSemanaEnEspañol();
+            var horaActual = DateTime.Now.TimeOfDay;
+
+            modelo.ProximosProgramas = db.Programas
+                .Where(p => p.Dia == diaActual && p.Hora > horaActual)
+                .OrderBy(p => p.Hora)
+                .Take(3)
+                .ToList();
+
             return View(modelo);
+        }
+
+        private string ObtenerDiaSemanaEnEspañol()
+        {
+            var dias = new Dictionary<DayOfWeek, string>
+            {
+                { DayOfWeek.Monday, "Lunes" },
+                { DayOfWeek.Tuesday, "Martes" },
+                { DayOfWeek.Wednesday, "Miércoles" },
+                { DayOfWeek.Thursday, "Jueves" },
+                { DayOfWeek.Friday, "Viernes" },
+                { DayOfWeek.Saturday, "Sábado" },
+                { DayOfWeek.Sunday, "Domingo" },
+            };
+
+            return dias[DateTime.Now.DayOfWeek];
         }
 
         public ActionResult About() => View();

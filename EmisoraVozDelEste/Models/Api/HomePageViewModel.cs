@@ -10,5 +10,8 @@ namespace EmisoraVozDelEste.Models.Api
         public Clima ClimaSidebar { get; set; }
         public List<Cotizaciones> Cotizaciones { get; set; }
 
+        public List<Noticias> UltimasNoticias { get; set; }
+        public List<Programas> ProximosProgramas { get; set; }
+
     }
 }
