@@ -17,12 +17,10 @@ namespace EmisoraVozDelEste.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            // Solo si está logueado:
             if (User.Identity.IsAuthenticated)
             {
                 var userName = User.Identity.Name;
 
-                // Trae User con Role y Permissions:
                 var user = db.Usuarios
                              .Include("Roles.Permisos")
                              .FirstOrDefault(u => u.Nombre == userName);

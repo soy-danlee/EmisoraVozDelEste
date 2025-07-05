@@ -56,6 +56,14 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Roles/Edit/5
         public ActionResult Edit(int? id)
         {
+            
+            // Verificar si el usuario tiene el permiso "Editar"
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("EditarUsuario"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
+
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -88,6 +96,13 @@ namespace EmisoraVozDelEste.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(EditRoleViewModel model)
         {
+            // ✅ Validar si tiene permiso "Editar"
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("EditarUsuario"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
+
             if (ModelState.IsValid)
             {
                 var role = db.Roles.Include(r => r.Permisos).FirstOrDefault(r => r.Id == model.Id);

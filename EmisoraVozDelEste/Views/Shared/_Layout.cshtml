@@ -149,6 +149,11 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
+    @{
+        var permisos = Session["Permisos"] as List<string>;
+        bool puedeVerDropdown = permisos != null && permisos.Contains("VerDropDown");
+    }
+
 </head>
 
 
@@ -185,7 +190,7 @@
                             @Html.ActionLink("Acerca de", "About", "Home", null, new { @class = "nav-link custom-link" })
                         </li>
 
-                        @if (Session["UsuarioNombre"] != null && Session["Rol"]?.ToString() == "Administrador")
+                        @if (Session["UsuarioNombre"] != null && puedeVerDropdown)
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

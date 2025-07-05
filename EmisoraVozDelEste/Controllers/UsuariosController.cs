@@ -37,6 +37,11 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Usuarios/Create
         public ActionResult Create()
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("CrearUsuario"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             ViewBag.RolId = new SelectList(db.Roles, "Id", "Nombre");
             return View();
         }
@@ -61,25 +66,29 @@ namespace EmisoraVozDelEste.Controllers
         }
 
         // GET: Usuarios/Edit/5
-        [HttpPost, ActionName("Edit")]
+        
         public ActionResult Edit(int? id)
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("EditarUsuario"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
+
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            Usuarios usuario = db.Usuarios.Find(id);
+            var usuario = db.Usuarios.Find(id);
             if (usuario == null)
                 return HttpNotFound();
 
-            // No mostrar la contraseña hasheada en la vista, dejar vacío para cambiar si se quiere
             usuario.Contraseña = null;
-
             ViewBag.RolId = new SelectList(db.Roles, "Id", "Nombre", usuario.RolId);
             return View(usuario);
         }
 
         // POST: Usuarios/Edit/5
-        [HttpPost, ActionName("Edit")]
+        [HttpPost, ActionName("EditarUsuario")]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Nombre,Email,Contraseña,RolId")] Usuarios usuario)
         {
@@ -113,6 +122,12 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Usuarios/Delete/5
         public ActionResult Delete(int? id)
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("EliminarUsuario"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
+
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
