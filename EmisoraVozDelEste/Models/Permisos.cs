@@ -14,10 +14,16 @@ namespace EmisoraVozDelEste.Models
     
     public partial class Permisos
     {
-        public int Id { get; set; }
-        public Nullable<int> RolId { get; set; }
-        public Nullable<bool> PuedeVerDropdown { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Permisos()
+        {
+            this.Roles = new HashSet<Roles>();
+        }
     
-        public virtual Roles Roles { get; set; }
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Roles> Roles { get; set; }
     }
 }

@@ -27,13 +27,14 @@ namespace EmisoraVozDelEste.Models
     
         public virtual DbSet<Clientes> Clientes { get; set; }
         public virtual DbSet<Clima> Clima { get; set; }
-        public virtual DbSet<Comentarios> Comentarios { get; set; }
         public virtual DbSet<Cotizaciones> Cotizaciones { get; set; }
         public virtual DbSet<Noticias> Noticias { get; set; }
         public virtual DbSet<Patrocinadores> Patrocinadores { get; set; }
         public virtual DbSet<Programas> Programas { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<Usuarios> Usuarios { get; set; }
-        public virtual DbSet<Conductores> Conductores { get; set; }
+        public virtual DbSet<Permisos> Permisos { get; set; }
+        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<Comentarios> Comentarios { get; set; }
     }
 }

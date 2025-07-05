@@ -105,6 +105,7 @@
 
             @using (Html.BeginForm("Login", "Login", FormMethod.Post))
             {
+                @Html.AntiForgeryToken()
                 <div class="form-group">
                     <label for="username">Usuario</label>
                     <input type="text" name="username" class="form-control" required />

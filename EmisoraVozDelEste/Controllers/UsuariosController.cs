@@ -25,15 +25,13 @@ namespace EmisoraVozDelEste.Controllers
         public ActionResult Details(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Usuarios usuarios = db.Usuarios.Find(id);
-            if (usuarios == null)
-            {
+
+            Usuarios usuario = db.Usuarios.Find(id);
+            if (usuario == null)
                 return HttpNotFound();
-            }
-            return View(usuarios);
+
+            return View(usuario);
         }
 
         // GET: Usuarios/Create
@@ -44,76 +42,85 @@ namespace EmisoraVozDelEste.Controllers
         }
 
         // POST: Usuarios/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
-        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nombre,Email,Contraseña,RolId")] Usuarios usuarios)
+        public ActionResult Create([Bind(Include = "Id,Nombre,Email,Contraseña,RolId")] Usuarios usuario)
         {
             if (ModelState.IsValid)
             {
-                db.Usuarios.Add(usuarios);
+                // Hashear contraseña antes de guardar
+                usuario.Contraseña = BCrypt.Net.BCrypt.HashPassword(usuario.Contraseña);
+
+                db.Usuarios.Add(usuario);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.RolId = new SelectList(db.Roles, "Id", "Nombre", usuarios.RolId);
-            return View(usuarios);
+            ViewBag.RolId = new SelectList(db.Roles, "Id", "Nombre", usuario.RolId);
+            return View(usuario);
         }
 
         // GET: Usuarios/Edit/5
-        
+        [HttpPost, ActionName("Edit")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Usuarios usuarios = db.Usuarios.Find(id);
-            
-            if (usuarios == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.RolId = new SelectList(db.Roles, "Id", "Nombre", usuarios.RolId);
-            
-            return View(usuarios);
-           
-            
 
-            
+            Usuarios usuario = db.Usuarios.Find(id);
+            if (usuario == null)
+                return HttpNotFound();
+
+            // No mostrar la contraseña hasheada en la vista, dejar vacío para cambiar si se quiere
+            usuario.Contraseña = null;
+
+            ViewBag.RolId = new SelectList(db.Roles, "Id", "Nombre", usuario.RolId);
+            return View(usuario);
         }
 
         // POST: Usuarios/Edit/5
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
-        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nombre,Email,Contraseña,RolId")] Usuarios usuarios)
+        public ActionResult Edit([Bind(Include = "Id,Nombre,Email,Contraseña,RolId")] Usuarios usuario)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(usuarios).State = EntityState.Modified;
+                var usuarioOriginal = db.Usuarios.AsNoTracking().FirstOrDefault(u => u.Id == usuario.Id);
+
+                if (usuarioOriginal == null)
+                    return HttpNotFound();
+
+                if (!string.IsNullOrWhiteSpace(usuario.Contraseña))
+                {
+                    // Si se ingresó nueva contraseña, hashearla
+                    usuario.Contraseña = BCrypt.Net.BCrypt.HashPassword(usuario.Contraseña);
+                }
+                else
+                {
+                    // Si no se cambió, mantener la antigua
+                    usuario.Contraseña = usuarioOriginal.Contraseña;
+                }
+
+                db.Entry(usuario).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.RolId = new SelectList(db.Roles, "Id", "Nombre", usuarios.RolId);
-            return View(usuarios);
+
+            ViewBag.RolId = new SelectList(db.Roles, "Id", "Nombre", usuario.RolId);
+            return View(usuario);
         }
 
         // GET: Usuarios/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Usuarios usuarios = db.Usuarios.Find(id);
-            if (usuarios == null)
-            {
+
+            Usuarios usuario = db.Usuarios.Find(id);
+            if (usuario == null)
                 return HttpNotFound();
-            }
-            return View(usuarios);
+
+            return View(usuario);
         }
 
         // POST: Usuarios/Delete/5
@@ -121,8 +128,8 @@ namespace EmisoraVozDelEste.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Usuarios usuarios = db.Usuarios.Find(id);
-            db.Usuarios.Remove(usuarios);
+            Usuarios usuario = db.Usuarios.Find(id);
+            db.Usuarios.Remove(usuario);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -130,9 +137,7 @@ namespace EmisoraVozDelEste.Controllers
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 db.Dispose();
-            }
             base.Dispose(disposing);
         }
     }

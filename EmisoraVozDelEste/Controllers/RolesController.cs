@@ -24,15 +24,13 @@ namespace EmisoraVozDelEste.Controllers
         public ActionResult Details(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Roles roles = db.Roles.Find(id);
-            if (roles == null)
-            {
+
+            var role = db.Roles.Include(r => r.Permisos).FirstOrDefault(r => r.Id == id);
+            if (role == null)
                 return HttpNotFound();
-            }
-            return View(roles);
+
+            return View(role);
         }
 
         // GET: Roles/Create
@@ -42,66 +40,107 @@ namespace EmisoraVozDelEste.Controllers
         }
 
         // POST: Roles/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
-        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nombre,PuedeVerDropdown,PuedeEditar,PuedeEliminar")] Roles roles)
+        public ActionResult Create([Bind(Include = "Id,Nombre")] Roles role)
         {
             if (ModelState.IsValid)
             {
-                db.Roles.Add(roles);
+                db.Roles.Add(role);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            return View(roles);
+            return View(role);
         }
 
         // GET: Roles/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Roles roles = db.Roles.Find(id);
-            if (roles == null)
-            {
+
+            var role = db.Roles.Include(r => r.Permisos).FirstOrDefault(r => r.Id == id);
+            if (role == null)
                 return HttpNotFound();
-            }
-            return View(roles);
+
+            var allPermissions = db.Permisos.ToList();
+            var rolePermissionIds = role.Permisos.Select(p => p.Id).ToList();
+
+            var permissionCheckboxes = allPermissions.Select(p => new PermissionCheckbox
+            {
+                PermissionID = p.Id,
+                PermissionName = p.Nombre,
+                IsAssigned = rolePermissionIds.Contains(p.Id)
+            }).ToList();
+
+            var viewModel = new EditRoleViewModel
+            {
+                Id = role.Id,
+                Nombre = role.Nombre,
+                Permisos = permissionCheckboxes
+            };
+
+            return View(viewModel);
         }
 
         // POST: Roles/Edit/5
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
-        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nombre,PuedeVerDropdown,PuedeEditar,PuedeEliminar")] Roles roles)
+        public ActionResult Edit(EditRoleViewModel model)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(roles).State = EntityState.Modified;
+                var role = db.Roles.Include(r => r.Permisos).FirstOrDefault(r => r.Id == model.Id);
+                if (role == null)
+                    return HttpNotFound();
+
+                role.Nombre = model.Nombre;
+
+                // Limpiar permisos actuales
+                role.Permisos.Clear();
+
+                // Agregar nuevos permisos seleccionados
+                var selectedPermissionIds = model.Permisos
+                    .Where(p => p.IsAssigned)
+                    .Select(p => p.PermissionID)
+                    .ToList();
+
+                var selectedPermissions = db.Permisos
+                    .Where(p => selectedPermissionIds.Contains(p.Id))
+                    .ToList();
+
+                foreach (var permiso in selectedPermissions)
+                {
+                    role.Permisos.Add(permiso);
+                }
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(roles);
+
+            // Si hay error, recargar permisos
+            var allPermissions = db.Permisos.ToList();
+            model.Permisos = allPermissions.Select(p => new PermissionCheckbox
+            {
+                PermissionID = p.Id,
+                PermissionName = p.Nombre,
+                IsAssigned = model.Permisos.Any(mp => mp.PermissionID == p.Id && mp.IsAssigned)
+            }).ToList();
+
+            return View(model);
         }
 
         // GET: Roles/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Roles roles = db.Roles.Find(id);
-            if (roles == null)
-            {
+
+            var role = db.Roles.Find(id);
+            if (role == null)
                 return HttpNotFound();
-            }
-            return View(roles);
+
+            return View(role);
         }
 
         // POST: Roles/Delete/5
@@ -109,19 +148,36 @@ namespace EmisoraVozDelEste.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Roles roles = db.Roles.Find(id);
-            db.Roles.Remove(roles);
-            db.SaveChanges();
+            var role = db.Roles.Find(id);
+            if (role != null)
+            {
+                db.Roles.Remove(role);
+                db.SaveChanges();
+            }
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 db.Dispose();
-            }
             base.Dispose(disposing);
         }
+    }
+
+    // ViewModel para la edición de Roles con Permisos
+    public class EditRoleViewModel
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public List<PermissionCheckbox> Permisos { get; set; }
+    }
+
+    // Clase para manejar el checkbox de permisos en la vista
+    public class PermissionCheckbox
+    {
+        public int PermissionID { get; set; }
+        public string PermissionName { get; set; }
+        public bool IsAssigned { get; set; }
     }
 }

@@ -36,15 +36,6 @@
           <Property Name="Comentario" Type="nvarchar(max)" />
           <Property Name="Fecha" Type="datetime" />
         </EntityType>
-        <EntityType Name="Conductores">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Nombre" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Bio" Type="nvarchar(max)" />
-          <Property Name="ProgramaId" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="Cotizaciones">
           <Key>
             <PropertyRef Name="Id" />
@@ -73,6 +64,13 @@
           <Property Name="Descripcion" Type="nvarchar(max)" />
           <Property Name="FrecuenciaAnuncio" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="Permisos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
         <EntityType Name="Programas">
           <Key>
             <PropertyRef Name="Id" />
@@ -90,9 +88,24 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="PuedeVerDropdown" Type="bit" Nullable="false" />
-          <Property Name="PuedeEditar" Type="bit" Nullable="false" />
-          <Property Name="PuedeEliminar" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RolesPermisos">
+          <Key>
+            <PropertyRef Name="RolId" />
+            <PropertyRef Name="PermisoId" />
+          </Key>
+          <Property Name="RolId" Type="int" Nullable="false" />
+          <Property Name="PermisoId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="Usuarios">
           <Key>
@@ -104,7 +117,7 @@
           <Property Name="Contraseña" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="RolId" Type="int" Nullable="false" />
         </EntityType>
-        <Association Name="FK__Clientes__Usuari__4E88ABD4">
+        <Association Name="FK__Clientes__Usuari__40F9A68C">
           <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="0..1" />
           <End Role="Clientes" Type="Self.Clientes" Multiplicity="*" />
           <ReferentialConstraint>
@@ -116,7 +129,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Comentari__Clien__59FA5E80">
+        <Association Name="FK__Comentari__Clien__4F47C5E3">
           <End Role="Clientes" Type="Self.Clientes" Multiplicity="1" />
           <End Role="Comentarios" Type="Self.Comentarios" Multiplicity="*" />
           <ReferentialConstraint>
@@ -128,7 +141,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Comentari__Progr__5AEE82B9">
+        <Association Name="FK__Comentari__Progr__503BEA1C">
           <End Role="Programas" Type="Self.Programas" Multiplicity="1" />
           <End Role="Comentarios" Type="Self.Comentarios" Multiplicity="*" />
           <ReferentialConstraint>
@@ -140,19 +153,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Conductor__Progr__5535A963">
-          <End Role="Programas" Type="Self.Programas" Multiplicity="1" />
-          <End Role="Conductores" Type="Self.Conductores" Multiplicity="*" />
+        <Association Name="FK__RolesPerm__Permi__46B27FE2">
+          <End Role="Permisos" Type="Self.Permisos" Multiplicity="1" />
+          <End Role="RolesPermisos" Type="Self.RolesPermisos" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Programas">
+            <Principal Role="Permisos">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Conductores">
-              <PropertyRef Name="ProgramaId" />
+            <Dependent Role="RolesPermisos">
+              <PropertyRef Name="PermisoId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Usuarios__RolId__4BAC3F29">
+        <Association Name="FK__RolesPerm__RolId__45BE5BA9">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="RolesPermisos" Type="Self.RolesPermisos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RolesPermisos">
+              <PropertyRef Name="RolId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Usuarios__RolId__3E1D39E1">
           <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
           <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
           <ReferentialConstraint>
@@ -168,30 +193,36 @@
           <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Clima" EntityType="Self.Clima" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Comentarios" EntityType="Self.Comentarios" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Conductores" EntityType="Self.Conductores" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cotizaciones" EntityType="Self.Cotizaciones" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Noticias" EntityType="Self.Noticias" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Patrocinadores" EntityType="Self.Patrocinadores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Permisos" EntityType="Self.Permisos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Programas" EntityType="Self.Programas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RolesPermisos" EntityType="Self.RolesPermisos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Clientes__Usuari__4E88ABD4" Association="Self.FK__Clientes__Usuari__4E88ABD4">
+          <AssociationSet Name="FK__Clientes__Usuari__40F9A68C" Association="Self.FK__Clientes__Usuari__40F9A68C">
             <End Role="Usuarios" EntitySet="Usuarios" />
             <End Role="Clientes" EntitySet="Clientes" />
           </AssociationSet>
-          <AssociationSet Name="FK__Comentari__Clien__59FA5E80" Association="Self.FK__Comentari__Clien__59FA5E80">
+          <AssociationSet Name="FK__Comentari__Clien__4F47C5E3" Association="Self.FK__Comentari__Clien__4F47C5E3">
             <End Role="Clientes" EntitySet="Clientes" />
             <End Role="Comentarios" EntitySet="Comentarios" />
           </AssociationSet>
-          <AssociationSet Name="FK__Comentari__Progr__5AEE82B9" Association="Self.FK__Comentari__Progr__5AEE82B9">
+          <AssociationSet Name="FK__Comentari__Progr__503BEA1C" Association="Self.FK__Comentari__Progr__503BEA1C">
             <End Role="Programas" EntitySet="Programas" />
             <End Role="Comentarios" EntitySet="Comentarios" />
           </AssociationSet>
-          <AssociationSet Name="FK__Conductor__Progr__5535A963" Association="Self.FK__Conductor__Progr__5535A963">
-            <End Role="Programas" EntitySet="Programas" />
-            <End Role="Conductores" EntitySet="Conductores" />
+          <AssociationSet Name="FK__RolesPerm__Permi__46B27FE2" Association="Self.FK__RolesPerm__Permi__46B27FE2">
+            <End Role="Permisos" EntitySet="Permisos" />
+            <End Role="RolesPermisos" EntitySet="RolesPermisos" />
           </AssociationSet>
-          <AssociationSet Name="FK__Usuarios__RolId__4BAC3F29" Association="Self.FK__Usuarios__RolId__4BAC3F29">
+          <AssociationSet Name="FK__RolesPerm__RolId__45BE5BA9" Association="Self.FK__RolesPerm__RolId__45BE5BA9">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="RolesPermisos" EntitySet="RolesPermisos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Usuarios__RolId__3E1D39E1" Association="Self.FK__Usuarios__RolId__3E1D39E1">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Usuarios" EntitySet="Usuarios" />
           </AssociationSet>
@@ -209,9 +240,9 @@
           <Property Name="Apellido" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="FechaNacimiento" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="Comentarios" Relationship="Self.FK__Comentari__Clien__59063A47" FromRole="Clientes" ToRole="Comentarios" />
           <Property Name="UsuarioID" Type="Int32" />
           <NavigationProperty Name="Usuarios" Relationship="VozDelEsteModel.FK_Clientes_Usuarios" FromRole="Clientes" ToRole="Usuarios" />
+          <NavigationProperty Name="Comentarios" Relationship="VozDelEsteModel.FK__Comentari__Clien__4F47C5E3" FromRole="Clientes" ToRole="Comentarios" />
         </EntityType>
         <EntityType Name="Clima">
           <Key>
@@ -222,18 +253,6 @@
           <Property Name="Temperatura" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Icono" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="Comentarios">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ClienteCI" Type="Int32" Nullable="false" />
-          <Property Name="ProgramaId" Type="Int32" Nullable="false" />
-          <Property Name="Comentario" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Fecha" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Clientes" Relationship="Self.FK__Comentari__Clien__59063A47" FromRole="Comentarios" ToRole="Clientes" />
-          <NavigationProperty Name="Programas" Relationship="Self.FK__Comentari__Progr__59FA5E80" FromRole="Comentarios" ToRole="Programas" />
         </EntityType>
         <EntityType Name="Cotizaciones">
           <Key>
@@ -273,8 +292,7 @@
           <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Dia" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Hora" Type="Time" Precision="7" />
-          <NavigationProperty Name="Comentarios" Relationship="Self.FK__Comentari__Progr__59FA5E80" FromRole="Programas" ToRole="Comentarios" />
-          <NavigationProperty Name="Conductores" Relationship="VozDelEsteModel.FK__Conductor__Progr__5535A963" FromRole="Programas" ToRole="Conductores" />
+          <NavigationProperty Name="Comentarios" Relationship="VozDelEsteModel.FK__Comentari__Progr__503BEA1C" FromRole="Programas" ToRole="Comentarios" />
         </EntityType>
         <EntityType Name="Roles">
           <Key>
@@ -283,9 +301,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Usuarios" Relationship="Self.FK__Usuarios__RolId__4BAC3F29" FromRole="Roles" ToRole="Usuarios" />
-          <Property Name="PuedeVerDropdown" Type="Boolean" Nullable="false" />
-          <Property Name="PuedeEditar" Type="Boolean" Nullable="false" />
-          <Property Name="PuedeEliminar" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Permisos" Relationship="VozDelEsteModel.RolesPermisos" FromRole="Roles" ToRole="Permisos" />
         </EntityType>
         <EntityType Name="Usuarios">
           <Key>
@@ -299,30 +315,6 @@
           <NavigationProperty Name="Roles" Relationship="Self.FK__Usuarios__RolId__4BAC3F29" FromRole="Usuarios" ToRole="Roles" />
           <NavigationProperty Name="Clientes" Relationship="VozDelEsteModel.FK_Clientes_Usuarios" FromRole="Usuarios" ToRole="Clientes" />
         </EntityType>
-        <Association Name="FK__Comentari__Clien__59063A47">
-          <End Role="Clientes" Type="Self.Clientes" Multiplicity="1" />
-          <End Role="Comentarios" Type="Self.Comentarios" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Clientes">
-              <PropertyRef Name="CI" />
-            </Principal>
-            <Dependent Role="Comentarios">
-              <PropertyRef Name="ClienteCI" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Comentari__Progr__59FA5E80">
-          <End Role="Programas" Type="Self.Programas" Multiplicity="1" />
-          <End Role="Comentarios" Type="Self.Comentarios" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Programas">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Comentarios">
-              <PropertyRef Name="ProgramaId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__Usuarios__RolId__4BAC3F29">
           <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
           <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
@@ -338,21 +330,12 @@
         <EntityContainer Name="VozDelEsteEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Clientes" EntityType="Self.Clientes" />
           <EntitySet Name="Clima" EntityType="Self.Clima" />
-          <EntitySet Name="Comentarios" EntityType="Self.Comentarios" />
           <EntitySet Name="Cotizaciones" EntityType="Self.Cotizaciones" />
           <EntitySet Name="Noticias" EntityType="Self.Noticias" />
           <EntitySet Name="Patrocinadores" EntityType="Self.Patrocinadores" />
           <EntitySet Name="Programas" EntityType="Self.Programas" />
           <EntitySet Name="Roles" EntityType="Self.Roles" />
           <EntitySet Name="Usuarios" EntityType="Self.Usuarios" />
-          <AssociationSet Name="FK__Comentari__Clien__59063A47" Association="Self.FK__Comentari__Clien__59063A47">
-            <End Role="Clientes" EntitySet="Clientes" />
-            <End Role="Comentarios" EntitySet="Comentarios" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Comentari__Progr__59FA5E80" Association="Self.FK__Comentari__Progr__59FA5E80">
-            <End Role="Programas" EntitySet="Programas" />
-            <End Role="Comentarios" EntitySet="Comentarios" />
-          </AssociationSet>
           <AssociationSet Name="FK__Usuarios__RolId__4BAC3F29" Association="Self.FK__Usuarios__RolId__4BAC3F29">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Usuarios" EntitySet="Usuarios" />
@@ -361,12 +344,22 @@
             <End Role="Usuarios" EntitySet="Usuarios" />
             <End Role="Clientes" EntitySet="Clientes" />
           </AssociationSet>
-          <EntitySet Name="Conductores" EntityType="VozDelEsteModel.Conductores" />
-          <AssociationSet Name="FK__Conductor__Progr__5535A963" Association="VozDelEsteModel.FK__Conductor__Progr__5535A963">
-            <End Role="Programas" EntitySet="Programas" />
-            <End Role="Conductores" EntitySet="Conductores" />
+          <EntitySet Name="Permisos" EntityType="VozDelEsteModel.Permisos" />
+          <AssociationSet Name="RolesPermisos" Association="VozDelEsteModel.RolesPermisos">
+            <End Role="Permisos" EntitySet="Permisos" />
+            <End Role="Roles" EntitySet="Roles" />
           </AssociationSet>
-        </EntityContainer>
+          <EntitySet Name="sysdiagrams" EntityType="VozDelEsteModel.sysdiagrams" />
+          <EntitySet Name="Comentarios" EntityType="VozDelEsteModel.Comentarios" />
+          <AssociationSet Name="FK__Comentari__Clien__4F47C5E3" Association="VozDelEsteModel.FK__Comentari__Clien__4F47C5E3">
+            <End Role="Clientes" EntitySet="Clientes" />
+            <End Role="Comentarios" EntitySet="Comentarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Comentari__Progr__503BEA1C" Association="VozDelEsteModel.FK__Comentari__Progr__503BEA1C">
+            <End Role="Programas" EntitySet="Programas" />
+            <End Role="Comentarios" EntitySet="Comentarios" />
+          </AssociationSet>
+          </EntityContainer>
         <Association Name="FK_Clientes_Usuarios">
           <End Type="VozDelEsteModel.Usuarios" Role="Usuarios" Multiplicity="0..1" />
           <End Type="VozDelEsteModel.Clientes" Role="Clientes" Multiplicity="*" />
@@ -379,29 +372,65 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Conductores">
+        <EntityType Name="Permisos">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Bio" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ProgramaId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Programas" Relationship="VozDelEsteModel.FK__Conductor__Progr__5535A963" FromRole="Conductores" ToRole="Programas" />
+          <NavigationProperty Name="Roles" Relationship="VozDelEsteModel.RolesPermisos" FromRole="Permisos" ToRole="Roles" />
         </EntityType>
-        <Association Name="FK__Conductor__Progr__5535A963">
+        <Association Name="RolesPermisos">
+          <End Type="VozDelEsteModel.Permisos" Role="Permisos" Multiplicity="*" />
+          <End Type="VozDelEsteModel.Roles" Role="Roles" Multiplicity="*" />
+        </Association>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Comentarios">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClienteCI" Type="Int32" Nullable="false" />
+          <Property Name="ProgramaId" Type="Int32" Nullable="false" />
+          <Property Name="Comentario" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Fecha" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Clientes" Relationship="VozDelEsteModel.FK__Comentari__Clien__4F47C5E3" FromRole="Comentarios" ToRole="Clientes" />
+          <NavigationProperty Name="Programas" Relationship="VozDelEsteModel.FK__Comentari__Progr__503BEA1C" FromRole="Comentarios" ToRole="Programas" />
+        </EntityType>
+        <Association Name="FK__Comentari__Clien__4F47C5E3">
+          <End Type="VozDelEsteModel.Clientes" Role="Clientes" Multiplicity="1" />
+          <End Type="VozDelEsteModel.Comentarios" Role="Comentarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clientes">
+              <PropertyRef Name="CI" />
+            </Principal>
+            <Dependent Role="Comentarios">
+              <PropertyRef Name="ClienteCI" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Comentari__Progr__503BEA1C">
           <End Type="VozDelEsteModel.Programas" Role="Programas" Multiplicity="1" />
-          <End Type="VozDelEsteModel.Conductores" Role="Conductores" Multiplicity="*" />
+          <End Type="VozDelEsteModel.Comentarios" Role="Comentarios" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Programas">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Conductores">
+            <Dependent Role="Comentarios">
               <PropertyRef Name="ProgramaId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -427,17 +456,6 @@
                 <ScalarProperty Name="Temperatura" ColumnName="Temperatura" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="Icono" ColumnName="Icono" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Comentarios">
-            <EntityTypeMapping TypeName="VozDelEsteModel.Comentarios">
-              <MappingFragment StoreEntitySet="Comentarios">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ClienteCI" ColumnName="ClienteCI" />
-                <ScalarProperty Name="ProgramaId" ColumnName="ProgramaId" />
-                <ScalarProperty Name="Comentario" ColumnName="Comentario" />
-                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -487,9 +505,6 @@
           <EntitySetMapping Name="Roles">
             <EntityTypeMapping TypeName="VozDelEsteModel.Roles">
               <MappingFragment StoreEntitySet="Roles">
-                <ScalarProperty Name="PuedeEliminar" ColumnName="PuedeEliminar" />
-                <ScalarProperty Name="PuedeEditar" ColumnName="PuedeEditar" />
-                <ScalarProperty Name="PuedeVerDropdown" ColumnName="PuedeVerDropdown" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
               </MappingFragment>
@@ -506,12 +521,40 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Conductores">
-            <EntityTypeMapping TypeName="VozDelEsteModel.Conductores">
-              <MappingFragment StoreEntitySet="Conductores">
-                <ScalarProperty Name="ProgramaId" ColumnName="ProgramaId" />
-                <ScalarProperty Name="Bio" ColumnName="Bio" />
+          <EntitySetMapping Name="Permisos">
+            <EntityTypeMapping TypeName="VozDelEsteModel.Permisos">
+              <MappingFragment StoreEntitySet="Permisos">
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="RolesPermisos" TypeName="VozDelEsteModel.RolesPermisos" StoreEntitySet="RolesPermisos">
+            <EndProperty Name="Roles">
+              <ScalarProperty Name="Id" ColumnName="RolId" />
+            </EndProperty>
+            <EndProperty Name="Permisos">
+              <ScalarProperty Name="Id" ColumnName="PermisoId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="VozDelEsteModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Comentarios">
+            <EntityTypeMapping TypeName="VozDelEsteModel.Comentarios">
+              <MappingFragment StoreEntitySet="Comentarios">
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Comentario" ColumnName="Comentario" />
+                <ScalarProperty Name="ProgramaId" ColumnName="ProgramaId" />
+                <ScalarProperty Name="ClienteCI" ColumnName="ClienteCI" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -7,20 +7,21 @@
       <Diagram DiagramId="f07c7d8dd69a4cee9db53e084d6b03c6" Name="Diagram1">
         <EntityTypeShape EntityType="VozDelEsteModel.Clientes" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="VozDelEsteModel.Clima" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="VozDelEsteModel.Comentarios" Width="1.5" PointX="3.375" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="VozDelEsteModel.Cotizaciones" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="VozDelEsteModel.Noticias" Width="1.5" PointX="7.375" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="VozDelEsteModel.Patrocinadores" Width="1.5" PointX="7.375" PointY="6.125" IsExpanded="true" />
         <EntityTypeShape EntityType="VozDelEsteModel.Programas" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
         <EntityTypeShape EntityType="VozDelEsteModel.Roles" Width="1.5" PointX="2.625" PointY="4.25" IsExpanded="true" />
         <EntityTypeShape EntityType="VozDelEsteModel.Usuarios" Width="1.5" PointX="5" PointY="4.875" IsExpanded="true" />
-        <AssociationConnector Association="VozDelEsteModel.FK__Comentari__Clien__59063A47" ManuallyRouted="false" />
-        <AssociationConnector Association="VozDelEsteModel.FK__Comentari__Progr__59FA5E80" ManuallyRouted="false" />
         <AssociationConnector Association="VozDelEsteModel.FK__Usuarios__RolId__4BAC3F29" ManuallyRouted="false" />
         <AssociationConnector Association="VozDelEsteModel.FK_Clientes_Usuarios" />
-        <EntityTypeShape EntityType="VozDelEsteModel.Conductores" Width="1.5" PointX="3" PointY="8.25" />
-        <AssociationConnector Association="VozDelEsteModel.FK__Conductor__Progr__5535A963" />
-      </Diagram>
+        <EntityTypeShape EntityType="VozDelEsteModel.Permisos" Width="1.5" PointX="0.75" PointY="8.625" />
+        <AssociationConnector Association="VozDelEsteModel.RolesPermisos" />
+        <EntityTypeShape EntityType="VozDelEsteModel.sysdiagrams" Width="1.5" PointX="5.375" PointY="8.75" />
+        <EntityTypeShape EntityType="VozDelEsteModel.Comentarios" Width="1.5" PointX="3" PointY="1" />
+        <AssociationConnector Association="VozDelEsteModel.FK__Comentari__Clien__4F47C5E3" />
+        <AssociationConnector Association="VozDelEsteModel.FK__Comentari__Progr__503BEA1C" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>
