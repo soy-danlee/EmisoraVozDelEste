@@ -50,6 +50,11 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Cotizaciones
         public ActionResult Index()
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("VerCotizacion"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             return View(db.Cotizaciones.ToList());
         }
 

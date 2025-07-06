@@ -17,12 +17,22 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Clientes
         public ActionResult Index()
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("VerGestionClientes"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             return View(db.Clientes.ToList());
         }
 
         // GET: Clientes/Details/5
         public ActionResult Details(int? id)
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("DetallesCliente"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -38,6 +48,11 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Clientes/Create
         public ActionResult Create()
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("CrearCliente"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             return View();
         }
 
@@ -61,6 +76,11 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Clientes/Edit/5
         public ActionResult Edit(int? id)
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("EditarCliente"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -92,6 +112,11 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Clientes/Delete/5
         public ActionResult Delete(int? id)
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("EliminarCliente"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -105,7 +130,7 @@ namespace EmisoraVozDelEste.Controllers
         }
 
         // POST: Clientes/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {

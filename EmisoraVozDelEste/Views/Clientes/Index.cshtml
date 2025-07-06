@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Index";
+    var permisos = Session["Permisos"] as List<string> ?? new List<string>();
 }
 
 <div class="container mt-5">
@@ -14,7 +15,11 @@
                 <div class="card-body">
 
                     <div class="mb-3 d-flex justify-content-end">
-                        @Html.ActionLink("Crear Nuevo", "Create", null, new { @class = "btn text-white", style = "background-color: #0a1a2f;" })
+                        @if (permisos.Contains("CrearCliente"))
+                        {
+                            @Html.ActionLink("Crear Nuevo", "Create", null, new { @class = "btn text-white", style = "background-color: #0a1a2f;" })
+                        }
+
                     </div>
 
                     <div class="table-responsive">
@@ -39,9 +44,23 @@
                                         <td>
                                             <!-- Botones verticales en pantallas pequeñas -->
                                             <div class="d-grid d-md-flex gap-2">
-                                                @Html.ActionLink("Editar", "Edit", new { id = item.CI }, new { @class = "btn btn-sm btn-warning" })
-                                                @Html.ActionLink("Detalles", "Details", new { id = item.CI }, new { @class = "btn btn-sm btn-info text-white" })
-                                                @Html.ActionLink("Eliminar", "Delete", new { id = item.CI }, new { @class = "btn btn-sm btn-danger" })
+                                                
+                                                @if (permisos.Contains("EditarCliente"))
+                                                {
+                                                    @Html.ActionLink("Editar", "Edit", new { id = item.CI }, new { @class = "btn btn-sm btn-warning" })
+                                                }
+
+                                                
+                                                @if (permisos.Contains("DetallesCliente"))
+                                                {
+                                                    @Html.ActionLink("Detalles", "Details", new { id = item.CI }, new { @class = "btn btn-sm btn-info text-white" })
+                                                }
+
+                                                
+                                                @if (permisos.Contains("EliminarCliente"))
+                                                {
+                                                    @Html.ActionLink("Eliminar", "Delete", new { id = item.CI }, new { @class = "btn btn-sm btn-danger" })
+                                                }
                                             </div>
                                         </td>
                                     </tr>

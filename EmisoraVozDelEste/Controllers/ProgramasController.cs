@@ -20,6 +20,11 @@ namespace EmisoraVozDelEste.Controllers
 
         public ActionResult Index()
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("VerGestionProgramas"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             var programas = db.Programas.ToList();
 
             var ahora = DateTime.Now;
@@ -42,6 +47,11 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Programas/Details/5
         public ActionResult Details(int? id)
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("DetallesProgramas"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -57,7 +67,8 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Programas/Create
         public ActionResult Create()
         {
-            if (Session["Rol"] == null || Session["Rol"].ToString() != "Administrador")
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("CrearPrograma"))
             {
                 return RedirectToAction("AccesoDenegado", "Login");
             }
@@ -72,10 +83,7 @@ namespace EmisoraVozDelEste.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Programas programa)
         {
-            if (Session["Rol"] == null || Session["Rol"].ToString() != "Administrador")
-            {
-                return RedirectToAction("AccesoDenegado", "Login");
-            }
+            
 
             if (ModelState.IsValid)
             {
@@ -90,7 +98,8 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Programas/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (Session["Rol"] == null || Session["Rol"].ToString() != "Administrador")
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("EditarPrograma"))
             {
                 return RedirectToAction("AccesoDenegado", "Login");
             }
@@ -126,7 +135,8 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Programas/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (Session["Rol"] == null || Session["Rol"].ToString() != "Administrador")
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("EliminarPrograma"))
             {
                 return RedirectToAction("AccesoDenegado", "Login");
             }
@@ -143,14 +153,11 @@ namespace EmisoraVozDelEste.Controllers
         }
 
         // POST: Programas/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            if (Session["Rol"] == null || Session["Rol"].ToString() != "Administrador")
-            {
-                return RedirectToAction("AccesoDenegado", "Login");
-            }
+            
             Programas programas = db.Programas.Find(id);
             db.Programas.Remove(programas);
             db.SaveChanges();

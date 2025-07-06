@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -17,12 +18,24 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Roles
         public ActionResult Index()
         {
+            var permisos = Session["Permisos"] as List<string>;
+
+            if (permisos == null || !permisos.Contains("VerGestionRoles"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             return View(db.Roles.ToList());
         }
 
         // GET: Roles/Details/5
         public ActionResult Details(int? id)
         {
+            var permisos = Session["Permisos"] as List<string>;
+
+            if (permisos == null || !permisos.Contains("DetallesRoles"))
+            {
+                return RedirectToAction("AccesoDenegado", "Home");
+            }
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -36,6 +49,12 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Roles/Create
         public ActionResult Create()
         {
+            var permisos = Session["Permisos"] as List<string>;
+
+            if (permisos == null || !permisos.Contains("CrearRoles"))
+            {
+                return RedirectToAction("AccesoDenegado", "Home");
+            }
             return View();
         }
 
@@ -56,10 +75,10 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Roles/Edit/5
         public ActionResult Edit(int? id)
         {
-            
+
             // Verificar si el usuario tiene el permiso "Editar"
             var permisos = Session["Permisos"] as List<string>;
-            if (permisos == null || !permisos.Contains("EditarUsuario"))
+            if (permisos == null || !permisos.Contains("EditarRoles"))
             {
                 return RedirectToAction("AccesoDenegado", "Login");
             }
@@ -98,7 +117,7 @@ namespace EmisoraVozDelEste.Controllers
         {
             // ✅ Validar si tiene permiso "Editar"
             var permisos = Session["Permisos"] as List<string>;
-            if (permisos == null || !permisos.Contains("EditarUsuario"))
+            if (permisos == null || !permisos.Contains("EditarRoles"))
             {
                 return RedirectToAction("AccesoDenegado", "Login");
             }
@@ -129,18 +148,41 @@ namespace EmisoraVozDelEste.Controllers
                     role.Permisos.Add(permiso);
                 }
 
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    foreach (var eve in ex.EntityValidationErrors)
+                    {
+                        var entityName = eve.Entry.Entity.GetType().Name;
+                        foreach (var ve in eve.ValidationErrors)
+                        {
+                            var error = $"Entidad: {entityName}, Propiedad: {ve.PropertyName}, Error: {ve.ErrorMessage}";
+                            System.Diagnostics.Debug.WriteLine(error);
+                            ModelState.AddModelError(ve.PropertyName, ve.ErrorMessage);
+                        }
+                    }
+                    // ❗️Pasamos a reconstruir los permisos correctamente más abajo
+                }
             }
 
-            // Si hay error, recargar permisos
-            var allPermissions = db.Permisos.ToList();
-            model.Permisos = allPermissions.Select(p => new PermissionCheckbox
-            {
-                PermissionID = p.Id,
-                PermissionName = p.Nombre,
-                IsAssigned = model.Permisos.Any(mp => mp.PermissionID == p.Id && mp.IsAssigned)
-            }).ToList();
+            // ⚠️ Siempre reconstruir la lista de permisos aunque haya errores
+            var permisosAsignados = model.Permisos
+    ?.Where(p => p.IsAssigned)
+    .Select(p => p.PermissionID)
+    .ToList() ?? new List<int>();
+
+            model.Permisos = db.Permisos
+                .Select(p => new PermissionCheckbox
+                {
+                    PermissionID = p.Id,
+                    PermissionName = p.Nombre,
+                    IsAssigned = permisosAsignados.Contains(p.Id)
+                })
+                .ToList();
 
             return View(model);
         }
@@ -148,6 +190,12 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Roles/Delete/5
         public ActionResult Delete(int? id)
         {
+            var permisos = Session["Permisos"] as List<string>;
+
+            if (permisos == null || !permisos.Contains("EliminarRoles"))
+            {
+                return RedirectToAction("AccesoDenegado", "Home");
+            }
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -159,7 +207,7 @@ namespace EmisoraVozDelEste.Controllers
         }
 
         // POST: Roles/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {

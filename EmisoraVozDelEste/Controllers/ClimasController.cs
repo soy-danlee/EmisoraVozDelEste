@@ -70,6 +70,11 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Climas
         public ActionResult Index()
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("VerClima"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             return View(db.Clima.ToList());
         }
 

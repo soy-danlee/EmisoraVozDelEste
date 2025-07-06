@@ -19,12 +19,22 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Noticias
         public ActionResult Index()
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("VerGestionNoticias"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             return View(db.Noticias.ToList());
         }
 
         // GET: Noticias/Details/5
         public ActionResult Details(int id)
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("DetallesNoticia"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             var noticia = db.Noticias.Find(id);
             if (noticia == null)
             {
@@ -34,16 +44,21 @@ namespace EmisoraVozDelEste.Controllers
         }
 
         // GET: Noticias/Create
-        [Authorize( Roles = "Administrador")]
+        
         public ActionResult Create()
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("CrearNoticia"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             return View();
         }
 
         // POST: Noticias/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost , ActionName("CrearNoticia")]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Titulo,Contenido,FechaPublicacion,Imagen")] Noticias noticias)
         {
@@ -60,6 +75,11 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Noticias/Edit/5
         public ActionResult Edit(int? id)
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("EditarNoticia"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -75,7 +95,7 @@ namespace EmisoraVozDelEste.Controllers
         // POST: Noticias/Edit/5
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost , ActionName("EditarNoticia")]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Titulo,Contenido,FechaPublicacion,Imagen")] Noticias noticias)
         {
@@ -91,6 +111,11 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Noticias/Delete/5
         public ActionResult Delete(int? id)
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("EliminarNoticia"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -104,7 +129,7 @@ namespace EmisoraVozDelEste.Controllers
         }
 
         // POST: Noticias/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("EliminarNoticia")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {

@@ -17,6 +17,13 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Usuarios
         public ActionResult Index()
         {
+            var permisos = Session["Permisos"] as List<string>;
+
+            if (permisos == null || !permisos.Contains("VerGestionUsuarios"))
+            {
+                return RedirectToAction("AccesoDenegado", "Home");
+            }
+
             var usuarios = db.Usuarios.Include(u => u.Roles);
             return View(usuarios.ToList());
         }
@@ -24,6 +31,13 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Usuarios/Details/5
         public ActionResult Details(int? id)
         {
+            var permisos = Session["Permisos"] as List<string>;
+
+            if (permisos == null || !permisos.Contains("VerDetallesUsuario"))
+            {
+                return RedirectToAction("AccesoDenegado", "Home");
+            }
+
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -51,6 +65,12 @@ namespace EmisoraVozDelEste.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Nombre,Email,Contraseña,RolId")] Usuarios usuario)
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("CrearUsuario"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
+
             if (ModelState.IsValid)
             {
                 // Hashear contraseña antes de guardar
@@ -88,7 +108,7 @@ namespace EmisoraVozDelEste.Controllers
         }
 
         // POST: Usuarios/Edit/5
-        [HttpPost, ActionName("EditarUsuario")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Nombre,Email,Contraseña,RolId")] Usuarios usuario)
         {
@@ -139,7 +159,7 @@ namespace EmisoraVozDelEste.Controllers
         }
 
         // POST: Usuarios/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {

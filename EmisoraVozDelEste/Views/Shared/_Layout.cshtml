@@ -150,8 +150,7 @@
     @Scripts.Render("~/bundles/modernizr")
 
     @{
-        var permisos = Session["Permisos"] as List<string>;
-        bool puedeVerDropdown = permisos != null && permisos.Contains("VerDropDown");
+        var permisos = Session["Permisos"] as List<string> ?? new List<string>();
     }
 
 </head>
@@ -190,7 +189,7 @@
                             @Html.ActionLink("Acerca de", "About", "Home", null, new { @class = "nav-link custom-link" })
                         </li>
 
-                        @if (Session["UsuarioNombre"] != null && puedeVerDropdown)
+                        @if (Session["UsuarioNombre"] != null && permisos.Contains("VerDropDown"))
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -198,11 +197,37 @@
                                     Hola, @Session["UsuarioNombre"] (@Session["Rol"])
                                 </a>
                                 <ul class="dropdown-menu custom-dropdown">
-                                    <li>@Html.ActionLink("Administrar clientes", "Index", "Clientes", null, new { @class = "dropdown-item" })</li>
-                                    <li>@Html.ActionLink("Administrar programas", "Index", "Programas", null, new { @class = "dropdown-item" })</li>
-                                    <li>@Html.ActionLink("Administrar noticias", "Index", "Noticias", null, new { @class = "dropdown-item" })</li>
-                                    <li>@Html.ActionLink("Panel de Control", "Index", "Roles", null, new { @class = "dropdown-item" })</li>
-                                    <li>@Html.ActionLink("Usuarios", "Index", "Usuarios", null, new { @class = "dropdown-item" })</li>
+
+                                    
+                                    @if (permisos.Contains("VerGestionClientes"))
+                                    {
+                                        <li>@Html.ActionLink("Administrar clientes", "Index", "Clientes", null, new { @class = "dropdown-item" })</li>
+                                    }
+
+                                    
+                                    @if (permisos.Contains("VerGestionProgramas"))
+                                    {
+                                        <li>@Html.ActionLink("Administrar programas", "Index", "Programas", null, new { @class = "dropdown-item" })</li>
+                                    }
+
+                                    
+                                    @if (permisos.Contains("VerGestionNoticias"))
+                                    {
+                                        <li>@Html.ActionLink("Administrar noticias", "Index", "Noticias", null, new { @class = "dropdown-item" })</li>
+                                    }
+
+                                    
+                                    @if (permisos.Contains("VerGestionRoles"))
+                                    {
+                                        <li>@Html.ActionLink("Panel de Control", "Index", "Roles", null, new { @class = "dropdown-item" })</li>
+                                    }
+
+                                    
+                                    @if (permisos.Contains("VerGestionUsuarios"))
+                                    {
+                                        <li>@Html.ActionLink("Usuarios", "Index", "Usuarios", null, new { @class = "dropdown-item" })</li>
+                                    }
+
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="#">Separated link</a></li>
                                 </ul>
