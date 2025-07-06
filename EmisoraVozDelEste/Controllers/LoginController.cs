@@ -42,7 +42,19 @@ namespace EmisoraVozDelEste.Controllers
 
                 Session["UsuarioNombre"] = user.Nombre;
                 Session["Rol"] = user.Roles?.Nombre ?? "Sin rol";
-                Session["Permisos"] = user.Roles?.Permisos?.Select(p => p.Nombre).ToList() ?? new List<string>();
+
+                var permisos = user.Roles?.Permisos?.Select(p => p.Nombre).ToList();
+                if (permisos != null && permisos.Any())
+                {
+                    Session["Permisos"] = permisos;
+                }
+
+                // Buscar cliente asociado
+                var cliente = db.Clientes.FirstOrDefault(c => c.UsuarioID == user.Id);
+                if (cliente != null)
+                {
+                    Session["ClienteCI"] = cliente.CI;
+                }
 
                 return RedirectToAction("Index", "Home");
             }
@@ -50,6 +62,7 @@ namespace EmisoraVozDelEste.Controllers
             ViewBag.Error = "Usuario o contraseña incorrectos.";
             return View();
         }
+
 
         public ActionResult Logout()
         {

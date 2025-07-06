@@ -98,7 +98,7 @@ namespace EmisoraVozDelEste.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CI,Nombre,Apellido,Email,FechaNacimiento")] Clientes clientes)
+        public ActionResult Edit([Bind(Include = "CI,Nombre,Apellido,Email,FechaNacimiento, UsuarioId")] Clientes clientes)
         {
             if (ModelState.IsValid)
             {

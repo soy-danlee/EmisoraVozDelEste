@@ -47,21 +47,21 @@ namespace EmisoraVozDelEste.Controllers
         // GET: Programas/Details/5
         public ActionResult Details(int? id)
         {
-            var permisos = Session["Permisos"] as List<string>;
-            if (permisos == null || !permisos.Contains("DetallesProgramas"))
-            {
-                return RedirectToAction("AccesoDenegado", "Login");
-            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Programas programas = db.Programas.Find(id);
-            if (programas == null)
+
+            var programa = db.Programas
+                             .Include(p => p.Comentarios.Select(c => c.Clientes))
+                             .FirstOrDefault(p => p.Id == id);
+
+            if (programa == null)
             {
                 return HttpNotFound();
             }
-            return View(programas);
+
+            return View(programa);
         }
 
         // GET: Programas/Create
@@ -209,7 +209,31 @@ namespace EmisoraVozDelEste.Controllers
             return null;
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AgregarComentario(int programaId, string comentario)
+        {
+            if (string.IsNullOrWhiteSpace(comentario))
+                return RedirectToAction("Details", new { id = programaId });
 
+            if (Session["ClienteCI"] == null)
+                return RedirectToAction("Login", "Login");
+
+            int clienteCI = Convert.ToInt32(Session["ClienteCI"]);
+
+            var nuevoComentario = new Comentarios
+            {
+                ProgramaId = programaId,
+                ClienteCI = clienteCI,
+                Comentario = comentario,
+                Fecha = DateTime.Now
+            };
+
+            db.Comentarios.Add(nuevoComentario);
+            db.SaveChanges();
+
+            return RedirectToAction("Sala", new { id = programaId });
+        }
 
 
     }

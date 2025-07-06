@@ -4,14 +4,65 @@
     ViewBag.Title = "Sala del Programa";
 }
 
-<h2>@Model.Nombre</h2>
+<style>
+    .comentario {
+        background-color: #f8f9fa;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
 
-<div>
-    <p>Radio</p>
+        .comentario strong {
+            color: #007bff;
+        }
 
-    <hr />
+    .comentario-fecha {
+        color: #888;
+        font-size: 0.9em;
+        margin-left: 5px;
+    }
 
-    <h4>Deja tu comentario</h4>
-    <textarea class="form-control" rows="4" placeholder="Escribe tu comentario..."></textarea>
-    <button class="btn btn-primary mt-2">Enviar</button>
-</div>
+    .comentario-texto {
+        margin-top: 5px;
+        font-size: 1rem;
+    }
+</style>
+
+<h4 style="color: white;">Deja tu comentario</h4>
+@if (Session["ClienteCI"] != null)
+{
+    <form action="@Url.Action("AgregarComentario", "Programas")" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="programaId" value="@Model.Id" />
+        <textarea class="form-control" name="comentario" rows="4" placeholder="Escribe tu comentario..."></textarea>
+        <button class="btn btn-primary mt-2" type="submit">Enviar</button>
+    </form>
+}
+else
+{
+    <p><em>Debes iniciar sesión para dejar un comentario.</em></p>
+}
+
+<hr />
+
+<h4 style="color: white;">Comentarios anteriores</h4>
+@if (Model.Comentarios != null && Model.Comentarios.Any())
+{
+    foreach (var c in Model.Comentarios.OrderBy(x => x.Fecha))
+    {
+        <div class="comentario">
+            <div>
+                <strong>@(c.Clientes?.Nombre ?? "Usuario desconocido")</strong> el @(c.Fecha?.ToString("g") ?? "")
+                <span class="comentario-fecha">@((c.Fecha?.ToString("g") ?? ""))</span>
+            </div>
+            <div class="comentario-texto">
+                @c.Comentario
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p>No hay comentarios aún.</p>
+}
