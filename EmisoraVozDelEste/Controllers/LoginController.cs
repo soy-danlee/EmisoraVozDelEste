@@ -21,6 +21,13 @@ namespace EmisoraVozDelEste.Controllers
             return View();
         }
 
+        public ActionResult GenerarHash()
+        {
+            string password = "1234";
+            string hash = BCrypt.Net.BCrypt.HashPassword(password);
+            return Content($"Hash generado para '{password}': {hash}");
+        }
+
         // POST: Login
         [HttpPost]
         [ValidateAntiForgeryToken]
