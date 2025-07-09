@@ -1,7 +1,7 @@
 ﻿@model EmisoraVozDelEste.Models.Clientes
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Eliminar Cliente";
 }
 
 <div class="container mt-5">
@@ -12,8 +12,14 @@
                     <h4 class="mb-0"><i class="fas fa-trash-alt me-2"></i> Eliminar Cliente</h4>
                 </div>
                 <div class="card-body">
-
                     <h5 class="text-danger mb-4">¿Estás seguro que deseas eliminar este cliente?</h5>
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger">
+                            @Html.ValidationSummary()
+                        </div>
+                    }
 
                     <ul class="list-group mb-4">
                         <li class="list-group-item"><strong>Nombre:</strong> @Html.DisplayFor(model => model.Nombre)</li>
@@ -22,9 +28,10 @@
                         <li class="list-group-item"><strong>Fecha de Nacimiento:</strong> @Html.DisplayFor(model => model.FechaNacimiento)</li>
                     </ul>
 
-                    @using (Html.BeginForm())
+                    @using (Html.BeginForm("DeleteConfirmed", "Clientes", FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
+                        @Html.HiddenFor(model => model.CI) <!-- ✅ Se envía el CI como ID -->
 
                         <div class="d-grid d-md-flex gap-2">
                             <input type="submit" value="Eliminar" class="btn text-white" style="background-color: #0a1a2f;" />

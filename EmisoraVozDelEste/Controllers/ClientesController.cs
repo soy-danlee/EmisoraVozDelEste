@@ -98,14 +98,32 @@ namespace EmisoraVozDelEste.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CI,Nombre,Apellido,Email,FechaNacimiento, UsuarioId")] Clientes clientes)
+        public ActionResult Edit([Bind(Include = "CI,Nombre,Apellido,Email,FechaNacimiento,UsuarioID")] Clientes clientes)
         {
             if (ModelState.IsValid)
             {
+                
+                bool usuarioExiste = db.Usuarios.Any(u => u.Id == clientes.UsuarioID);
+                if (!usuarioExiste)
+                {
+                    ModelState.AddModelError("UsuarioID", "El usuario ingresado no existe.");
+                    return View(clientes);
+                }
+
+                
+                bool usuarioYaUsado = db.Clientes.Any(c => c.UsuarioID == clientes.UsuarioID && c.CI != clientes.CI);
+                if (usuarioYaUsado)
+                {
+                    ModelState.AddModelError("UsuarioID", "Este usuario ya está asignado a otro cliente.");
+                    return View(clientes);
+                }
+
+                // Todo está bien, actualizar
                 db.Entry(clientes).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
             return View(clientes);
         }
 
@@ -117,26 +135,37 @@ namespace EmisoraVozDelEste.Controllers
             {
                 return RedirectToAction("AccesoDenegado", "Login");
             }
+
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Clientes clientes = db.Clientes.Find(id);
-            if (clientes == null)
-            {
+
+            Clientes cliente = db.Clientes.Find(id);
+            if (cliente == null)
                 return HttpNotFound();
-            }
-            return View(clientes);
+
+            return View(cliente);
         }
 
-        // POST: Clientes/Delete/5
+        // POST: Clientes/DeleteConfirmed
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int CI) // ✅ Nombre del parámetro igual al HiddenField
         {
-            Clientes clientes = db.Clientes.Find(id);
-            db.Clientes.Remove(clientes);
-            db.SaveChanges();
+            var cliente = db.Clientes.Find(CI);
+            if (cliente == null)
+                return HttpNotFound();
+
+            try
+            {
+                db.Clientes.Remove(cliente);
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Error al eliminar el cliente. Asegúrese de que no tiene relaciones pendientes.");
+                return View(cliente);
+            }
+
             return RedirectToAction("Index");
         }
 

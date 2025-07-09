@@ -163,9 +163,23 @@ namespace EmisoraVozDelEste.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Usuarios usuario = db.Usuarios.Find(id);
+            var usuario = db.Usuarios.Find(id);
+            if (usuario == null)
+                return HttpNotFound();
+
+            // Verificar si el usuario tiene clientes asociados
+            bool tieneClientes = db.Clientes.Any(c => c.UsuarioID == id);
+
+            if (tieneClientes)
+            {
+                ModelState.AddModelError("", "No se puede eliminar el usuario porque tiene clientes asignados.");
+                return View("Delete", usuario); // Mostrar la vista de borrado con el mensaje de error
+            }
+
+            // Si no tiene clientes, eliminar usuario
             db.Usuarios.Remove(usuario);
             db.SaveChanges();
+
             return RedirectToAction("Index");
         }
 
