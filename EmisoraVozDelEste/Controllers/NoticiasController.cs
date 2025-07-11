@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using EmisoraVozDelEste.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using System.Data.Entity.Validation;
 
 namespace EmisoraVozDelEste.Controllers
 {
@@ -58,15 +59,33 @@ namespace EmisoraVozDelEste.Controllers
         // POST: Noticias/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost , ActionName("CrearNoticia")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Titulo,Contenido,FechaPublicacion,Imagen")] Noticias noticias)
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("CrearNoticia"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             if (ModelState.IsValid)
             {
-                db.Noticias.Add(noticias);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Noticias.Add(noticias);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    foreach (var eve in ex.EntityValidationErrors)
+                    {
+                        foreach (var ve in eve.ValidationErrors)
+                        {
+                            ModelState.AddModelError(ve.PropertyName, ve.ErrorMessage);
+                        }
+                    }
+                }
             }
 
             return View(noticias);
@@ -95,10 +114,15 @@ namespace EmisoraVozDelEste.Controllers
         // POST: Noticias/Edit/5
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost , ActionName("EditarNoticia")]
+        [HttpPost ]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Titulo,Contenido,FechaPublicacion,Imagen")] Noticias noticias)
         {
+            var permisos = Session["Permisos"] as List<string>;
+            if (permisos == null || !permisos.Contains("EditarNoticia"))
+            {
+                return RedirectToAction("AccesoDenegado", "Login");
+            }
             if (ModelState.IsValid)
             {
                 db.Entry(noticias).State = EntityState.Modified;
@@ -129,7 +153,7 @@ namespace EmisoraVozDelEste.Controllers
         }
 
         // POST: Noticias/Delete/5
-        [HttpPost, ActionName("EliminarNoticia")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {

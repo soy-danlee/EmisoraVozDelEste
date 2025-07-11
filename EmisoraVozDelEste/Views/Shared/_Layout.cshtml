@@ -6,13 +6,27 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
-
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <style>
+        .glass {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(7px);
+            -webkit-backdrop-filter: blur(7px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .glass-navbar {
+            background-color: rgba(10, 26, 47, 0.7) !important;
+            backdrop-filter: blur(8px);
+        }
+
         body {
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(to bottom right, #081933, #b1c2d4);  /*azul claro a celeste */
+            background: linear-gradient(to bottom right, #081933, #b1c2d4); /*azul claro a celeste */
             background-size: cover; /* Hace que la imagen cubra todo el fondo */
             background-repeat: no-repeat; /* Evita que se repita */
             background-position: center center; /* Centra la imagen */
@@ -157,7 +171,7 @@
 
 <body>
     <div class="wrapper">
-        <nav class="navbar navbar-expand-sm sticky-top custom-navbar shadow">
+        <nav class="navbar navbar-expand-sm sticky-top custom-navbar shadow glass-navbar">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" href="@Url.Action("Index", "Home")">
                     <i class="fas fa-broadcast-tower me-2 fs-4 text-light"></i>

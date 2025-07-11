@@ -27,9 +27,18 @@
         z-index: 100;
     }
 
-    body {
-        background-color: #f2f2f2;
+    .hover-glow {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
+
+        .hover-glow:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+    /*body {
+        background-color: #f2f2f2;
+    }*/
 
     .list-group-item {
         border: none;
@@ -104,7 +113,7 @@
     <div class="row">
         <!-- Main content: ocupa 9/12 columnas en pantallas grandes -->
         <div class="col-12 col-lg-9 mb-4">
-            <div class="main-box">
+            <div class="main-box glass">
                 <h2 class="text-center">
                     Escuchá la Voz del Este en Vivo
                     <span class="live-indicator" title="En vivo"></span>
@@ -122,7 +131,7 @@
                     <ul class="list-group">
                         @foreach (var noticia in Model.UltimasNoticias)
                         {
-                            <li class="list-group-item">
+                            <li class="list-group-item hover-glow">
                                 <a href="@Url.Action("Details", "Noticias", new { id = noticia.Id })" style="text-decoration: none;">
                                     <strong>@noticia.Titulo</strong>
                                     <span class="text-muted float-end">@noticia.FechaPublicacion?.ToString("dd MMM")</span>
@@ -154,7 +163,7 @@
                         @foreach (var programa in Model.ProximosProgramas)
                         {
                             <div class="col-md-4 mb-3">
-                                <div class="card shadow-sm h-100">
+                                <div class="card shadow-sm h-100 hover-glow">
                                     <div class="card-body">
                                         <h5 class="card-title">@programa.Nombre</h5>
                                         <p class="card-text">@programa.Descripcion</p>
@@ -175,27 +184,27 @@
                     <div class="w-100" style="max-width: 90%;">
                         <div class="row row-cols-5 g-3">
                             <div class="col">
-                                <a href="https://www.nike.com" target="_blank" class="d-block h-100">
+                                <a href="https://www.nike.com" target="_blank" class="d-block h-100 hover-glow">
                                     <img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg" alt="Nike" class="logo-img" style="object-fit: contain;" />
                                 </a>
                             </div>
                             <div class="col">
-                                <a href="https://www.adidas.com" target="_blank" class="d-block h-100">
+                                <a href="https://www.adidas.com" target="_blank" class="d-block h-100 hover-glow">
                                     <img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg" alt="Adidas" class="logo-img" style="object-fit: contain;" />
                                 </a>
                             </div>
                             <div class="col">
-                                <a href="https://www.puma.com" target="_blank" class="d-block h-100">
+                                <a href="https://www.puma.com" target="_blank" class="d-block h-100 hover-glow">
                                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNOhHZ-0c3De3DFuwuosHkDnJRDwhDb-tLdw&s" alt="Puma" class="logo-img" style="object-fit: contain;" />
                                 </a>
                             </div>
                             <div class="col">
-                                <a href="https://www.reebok.com" target="_blank" class="d-block h-100">
+                                <a href="https://www.reebok.com" target="_blank" class="d-block h-100 hover-glow">
                                     <img src="https://static.vecteezy.com/system/resources/previews/021/963/705/non_2x/reebok-logo-illustration-free-vector.jpg" alt="Reebok" class="logo-img" style="object-fit: contain;" />
                                 </a>
                             </div>
                             <div class="col">
-                                <a href="https://www.umbro.com" target="_blank" class="d-block h-100">
+                                <a href="https://www.umbro.com" target="_blank" class="d-block h-100 hover-glow">
                                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Logo_Umbro.png/640px-Logo_Umbro.png" alt="Umbro" class="logo-img" style="object-fit: contain;" />
                                 </a>
                             </div>
@@ -208,7 +217,7 @@
         </div>
 
         <div class="col-12 col-lg-3">
-            <div class="sidebar-box">
+            <div class="sidebar-box glass">
                 <h4 class="mb-3">Información</h4>
 
                 @if (Model.ClimaSidebar != null)
