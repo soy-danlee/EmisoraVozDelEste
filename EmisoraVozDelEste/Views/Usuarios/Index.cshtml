@@ -27,8 +27,8 @@
                                 <tr>
                                     <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Nombre)</th>
                                     <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Email)</th>
-                                    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Contraseña)</th>
-                                    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Roles.Nombre)</th>
+                                    <th>Contraseña</th>
+                                    <th>Rol</th>        
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -38,8 +38,8 @@
                                     <tr>
                                         <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
                                         <td>@Html.DisplayFor(modelItem => item.Email)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Contraseña)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Roles.Nombre)</td>
+                                        <td>@(new string('●', 8))</td>
+                                        <td>@(item.Roles?.Nombre)</td>
                                         <td>
                                             <div class="d-grid d-md-flex gap-2">
                                                 @if (permisos.Contains("EditarUsuario"))
