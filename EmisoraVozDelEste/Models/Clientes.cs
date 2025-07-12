@@ -11,8 +11,7 @@ namespace EmisoraVozDelEste.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Clientes
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -25,9 +24,6 @@ namespace EmisoraVozDelEste.Models
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public string Email { get; set; }
-
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = false)]
         public Nullable<System.DateTime> FechaNacimiento { get; set; }
         public Nullable<int> UsuarioID { get; set; }
     
