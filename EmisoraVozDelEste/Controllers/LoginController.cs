@@ -75,7 +75,7 @@ namespace EmisoraVozDelEste.Controllers
         {
             FormsAuthentication.SignOut();
             Session.Clear();
-            return RedirectToAction("Login");
+            return RedirectToAction("Index", "Home");
         }
 
 
