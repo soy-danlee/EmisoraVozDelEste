@@ -342,6 +342,8 @@
     <Content Include="Views\Roles\Delete.cshtml" />
     <Content Include="Views\Roles\Details.cshtml" />
     <Content Include="Views\Programas\ProgramasCliente.cshtml" />
+    <Content Include="Views\Climas\ClimaEnMantenimiento.cshtml" />
+    <Content Include="Views\Cotizaciones\CotizacionesEnMantenimiento.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

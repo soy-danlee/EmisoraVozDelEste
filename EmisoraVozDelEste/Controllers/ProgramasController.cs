@@ -20,11 +20,7 @@ namespace EmisoraVozDelEste.Controllers
 
         public ActionResult Index()
         {
-            //var permisos = Session["Permisos"] as List<string>;
-            //if (permisos == null || !permisos.Contains("VerGestionProgramas"))
-            //{
-            //    return RedirectToAction("AccesoDenegado", "Login");
-            //}
+
             var programas = db.Programas.ToList();
 
             var ahora = DateTime.Now;

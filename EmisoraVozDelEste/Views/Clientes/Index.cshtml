@@ -40,7 +40,9 @@
                                         <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
                                         <td>@Html.DisplayFor(modelItem => item.Apellido)</td>
                                         <td>@Html.DisplayFor(modelItem => item.Email)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.FechaNacimiento)</td>
+                                        <td>
+                                            @(item.FechaNacimiento.HasValue ? item.FechaNacimiento.Value.ToString("dd/MM/yyyy") : "")
+                                        </td>
                                         <td>
                                             <!-- Botones verticales en pantallas pequeñas -->
                                             <div class="d-grid d-md-flex gap-2">
