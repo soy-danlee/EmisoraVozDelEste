@@ -6,53 +6,38 @@
 
 <h2>Details</h2>
 
-<div>
-    <h4>Programas</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header text-white" style="background-color: #0a1a2f;">
+                    <h4 class="mb-0"><i class="fas fa-info-circle me-2"></i> Detalles del Programa</h4>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Nombre)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Nombre)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Imagen)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Imagen)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Imagen)
-        </dt>
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Descripcion)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Descripcion)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Imagen)
-        </dd>
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Dia)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Dia)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </dt>
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Hora)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Hora)</dd>
+                    </dl>
 
-        <dd>
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Dia)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Dia)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Hora)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Hora)
-        </dd>
-
-    </dl>
+                    <div class="d-grid d-md-flex gap-2 mt-4">
+                        @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning btn-sm" })
+                        @Html.ActionLink("Volver a la Lista", "Index", null, new { @class = "btn text-white btn-sm", style = "background-color: #0a1a2f;" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+

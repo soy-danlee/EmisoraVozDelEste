@@ -5,75 +5,71 @@
 }
 
 
-@if (Session["Rol"] != null && Session["Rol"].ToString() == "Administrador")
-{
-    <h2>Crear Programa</h2>
-    using (Html.BeginForm())
+<div class="container mt-5">
+    @if (Session["Rol"] != null && Session["Rol"].ToString() == "Administrador")
     {
-        @Html.AntiForgeryToken()
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg">
+                    <div class="card-header text-white" style="background-color: #0a1a2f;">
+                        <h4><i class="fas fa-plus me-2"></i> Crear Programa</h4>
+                    </div>
+                    <div class="card-body">
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
 
-        <div class="form-horizontal">
-            <h4>Programas</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <h4>Programas</h4>
+                            <hr />
+                            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
-                </div>
-            </div>
+                            <div class="mb-3">
+                                @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "form-label" })
+                                @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                            </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Imagen, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Imagen, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Imagen, "", new { @class = "text-danger" })
-                </div>
-            </div>
+                            <div class="mb-3">
+                                @Html.LabelFor(model => model.Imagen, htmlAttributes: new { @class = "form-label" })
+                                @Html.EditorFor(model => model.Imagen, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Imagen, "", new { @class = "text-danger" })
+                            </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Descripcion, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
-                </div>
-            </div>
+                            <div class="mb-3">
+                                @Html.LabelFor(model => model.Descripcion, htmlAttributes: new { @class = "form-label" })
+                                @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+                            </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Dia, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Dia, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Dia, "", new { @class = "text-danger" })
-                </div>
-            </div>
+                            <div class="mb-3">
+                                @Html.LabelFor(model => model.Dia, htmlAttributes: new { @class = "form-label" })
+                                @Html.EditorFor(model => model.Dia, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Dia, "", new { @class = "text-danger" })
+                            </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Hora, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Hora, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Hora, "", new { @class = "text-danger" })
-                </div>
-            </div>
+                            <div class="mb-3">
+                                @Html.LabelFor(model => model.Hora, htmlAttributes: new { @class = "form-label" })
+                                @Html.EditorFor(model => model.Hora, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Hora, "", new { @class = "text-danger" })
+                            </div>
 
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" />
+                            <div class="d-flex justify-content-between">
+                                <input type="submit" value="Crear" class="btn text-white" style="background-color: #0a1a2f;" />
+                                @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-secondary" })
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
     }
-}
-else
-{
-    <p class="alert alert-danger">No tiene permiso para acceder a este formulario.</p>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
+    else
+    {
+        <p class="alert alert-danger">No tiene permiso para acceder a este formulario.</p>
+    }
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
