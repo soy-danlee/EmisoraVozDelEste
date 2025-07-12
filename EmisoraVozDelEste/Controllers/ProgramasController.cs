@@ -235,6 +235,24 @@ namespace EmisoraVozDelEste.Controllers
             return RedirectToAction("Sala", new { id = programaId });
         }
 
+        
+        public ActionResult ProgramasCliente(string busqueda)
+        {
+            
+            var programas = db.Programas.AsQueryable(); 
 
+            if (!string.IsNullOrEmpty(busqueda))
+            {
+                programas = programas
+                    .Where(p => p.Nombre.Contains(busqueda));
+            }
+            
+            var lista = programas.ToList();
+            
+            //var programaActual = db.Programas.FirstOrDefault(p => p.IsCurrent);
+            //ViewBag.ProgramaActual = programaActual;
+            
+            return View(lista);
+        }
     }
 }

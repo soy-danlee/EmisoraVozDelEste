@@ -1,0 +1,411 @@
+﻿
+@model IEnumerable<EmisoraVozDelEste.Models.Programas>
+@{
+    ViewBag.Title = "ProgramasCliente";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    :root {
+        --primary-blue: #1e40af;
+        --secondary-blue: #3b82f6;
+        --light-blue: #60a5fa;
+        --pale-blue: #dbeafe;
+        --dark-blue: #1e3a8a;
+        --accent-blue: #0ea5e9;
+        --gradient-primary: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        --gradient-secondary: linear-gradient(135deg, #60a5fa 0%, #93c5fd 100%);
+        --gradient-card: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    }
+
+    body {
+        background: var(--gradient-card);
+        min-height: 100vh;
+    }
+
+    .program-header {
+        background: var(--gradient-primary);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 2rem 2rem;
+        box-shadow: 0 10px 30px rgba(30, 64, 175, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .program-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        animation: float 8s ease-in-out infinite;
+    }
+
+    @@keyframes float {
+        0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+        }
+
+        50% {
+            transform: translateY(-20px) rotate(180deg);
+        }
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 1;
+    }
+
+    .page-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-top: 0.5rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .search-container {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 25px rgba(30, 64, 175, 0.1);
+        border: 1px solid var(--pale-blue);
+    }
+
+    .search-form {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 14px 20px;
+        border: 2px solid var(--pale-blue);
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+    }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--light-blue);
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+            transform: translateY(-1px);
+        }
+
+    .search-btn {
+        background: var(--gradient-secondary);
+        border: none;
+        color: white;
+        padding: 14px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(96, 165, 250, 0.3);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(96, 165, 250, 0.4);
+        }
+
+        .search-btn::before {
+            content: '🔍';
+            font-size: 1.1rem;
+        }
+
+    .program-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .program-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(30, 64, 175, 0.1);
+        transition: all 0.3s ease;
+        border: 1px solid var(--pale-blue);
+        height: 100%;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
+    .program-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 40px rgba(30, 64, 175, 0.2);
+        border-color: var(--light-blue);
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .program-card img {
+        height: 200px;
+        object-fit: cover;
+        width: 100%;
+        transition: transform 0.3s ease;
+        filter: brightness(100%);
+    }
+
+    .program-card:hover img {
+        transform: scale(1.05);
+        filter: brightness(90%);
+    }
+
+    .program-card .card-body {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .program-card .card-title {
+        color: var(--dark-blue);
+        font-weight: 700;
+        margin: 0;
+        font-size: 1.25rem;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .program-date {
+        color: var(--accent-blue);
+        font-weight: 500;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: auto;
+    }
+
+    .program-date::before {
+        content: '📅';
+        font-size: 1rem;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: white;
+        border-radius: 16px;
+        border: 1px solid var(--pale-blue);
+        box-shadow: 0 4px 20px rgba(30, 64, 175, 0.1);
+        margin-top: 2rem;
+    }
+
+    .no-results-icon {
+        font-size: 4rem;
+        color: var(--light-blue);
+        margin-bottom: 1rem;
+    }
+
+    .no-results h3 {
+        color: var(--dark-blue);
+        margin-bottom: 0.5rem;
+        font-size: 1.5rem;
+    }
+
+    .no-results p {
+        color: #64748b;
+        margin-bottom: 0;
+        font-size: 1.1rem;
+    }
+
+    .program-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: var(--gradient-primary);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        box-shadow: 0 2px 10px rgba(30, 64, 175, 0.3);
+    }
+
+    .programas-container {
+        padding: 0;
+    }
+
+    /* Efectos adicionales para hacer la página más dinámica */
+    .program-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--gradient-secondary);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .program-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .program-card {
+        position: relative;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .page-title {
+            font-size: 2rem;
+        }
+
+        .search-form {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .search-input,
+        .search-btn {
+            width: 100%;
+        }
+
+        .program-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .program-header {
+            padding: 2rem 0;
+        }
+
+        .search-container {
+            padding: 1.5rem;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .program-header {
+            margin-bottom: 1rem;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+        }
+
+        .search-container {
+            padding: 1rem;
+        }
+
+        .program-card .card-body {
+            padding: 1rem;
+        }
+
+        .program-card .card-title {
+            font-size: 1.1rem;
+        }
+    }
+</style>
+
+
+<div class="program-header">
+    <div class="container">
+        <h1 class="page-title text-center">📰 Últimos programas</h1>
+        <p class="page-subtitle text-center">Súbtitulo aquí</p>
+    </div>
+</div>
+
+<div class="container programas-container">
+    <div class="search-container">
+        <form asp-action="ProgramasCliente" method="get" class="search-form">
+            <input type="text" name="busqueda" class="search-input" placeholder="Buscar por nombre..." value="@Request.QueryString["busqueda"]" />
+            <button type="submit" class="search-btn">Buscar</button>
+        </form>
+    </div>
+
+    @if (ViewBag.ProgramaActual != null)
+    {
+        var actual = (EmisoraVozDelEste.Models.Programas)ViewBag.ProgramaActual;
+        <div class="live-program">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="mb-2">
+                        <span class="live-indicator"></span>
+                        EN VIVO: <strong>@actual.Nombre</strong>
+                    </h4>
+                    <p class="mb-0 opacity-90">@actual.Descripcion</p>
+                </div>
+                <div class="audio-player">
+                    <audio controls autoplay style="height: 40px;">
+                        <source src="https://URL-DE-TU-STREAMING" type="audio/mpeg">
+                        Tu navegador no soporta audio en línea.
+                    </audio>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-secondary" style="background: var(--gradient-card); border: 1px solid var(--pale-blue); border-radius: 12px;">
+            <div class="text-center">
+                <span style="font-size: 1.5rem; margin-right: 10px;">🎧</span>
+                No hay programa en emisión en este momento.
+            </div>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="no-programs">
+            <div class="no-programs-icon">🎵</div>
+            <h4 style="color: var(--dark-blue);">No hay programas disponibles</h4>
+            <p class="text-muted">Pronto tendremos contenido emocionante para ti.</p>
+        </div>
+    }
+    else
+    {
+        <div class="program-grid">
+            @foreach (var programa in Model)
+            {
+                <a href="@Url.Action("Sala", "Programas", new { id = programa.Id })" class="text-decoration-none">
+                    <div class="program-card">
+                        <img src="@programa.Imagen" alt="@programa.Nombre" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNkYmVhZmUiLz48cGF0aCBkPSJNMTUwIDEwMEM5NC43NzE1IDEwMCA1MCA5NC43NzE1IDUwIDg4LjMzMzNWMTExLjY2N0M1MCAxMDUuMjI4IDk0Ljc3MTUgMTAwIDE1MCAxMDBTMjUwIDEwNS4yMjggMjUwIDExMS42NjdWODguMzMzM0MyNTAgOTQuNzcxNSAyMDUuMjI4IDEwMCAxNTAgMTAwWiIgZmlsbD0iIzNiODJmNiIvPjx0ZXh0IHg9IjE1MCIgeT0iMTMwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMWU0MGFmIiBmb250LXNpemU9IjE0IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiI+UHJvZ3JhbWE8L3RleHQ+PC9zdmc+'" />
+                        <div class="card-body">
+                            <h5 class="card-title">@programa.Nombre</h5>
+                            <p class="card-text">@programa.Descripcion</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="schedule-info">
+                                <div>
+                                    <span class="schedule-badge">📅 @programa.Dia</span>
+                                </div>
+                                <div>
+                                    <span class="schedule-badge">🕐 @(programa.Hora.HasValue ? programa.Hora.Value.ToString(@"hh\:mm") : "Sin horario")</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+    }
+</div>
