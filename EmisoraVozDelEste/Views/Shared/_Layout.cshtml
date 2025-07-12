@@ -53,23 +53,34 @@
         }
 
 
-        a {
-            color: #0055aa;
-            text-decoration: none;
-        }
-
-            a:hover {
-                text-decoration: underline;
-            }
-
         footer {
-            background-color: #0a1a2f;
+            background-color: #0a1a2f; /* Cambiado a azul intenso, igual que el header */
             color: #ffffff;
             text-align: center;
-            padding: 15px;
+            padding: 20px 0;
             margin-top: 60px;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
         }
 
+        .footer a {
+            color: #ffffff; 
+            text-decoration: none; 
+        }
+
+        .footer a:hover {
+                text-decoration: underline;
+        }
+
+        .list-inline {
+            padding: 0;
+            margin: 10px 0 0; 
+            list-style: none; 
+        }
+
+        .list-inline-item {
+            display: inline;
+            margin: 0 10px;
+        }
         .layout-margen {
             margin: 0px;
         }
@@ -277,9 +288,25 @@
             <hr />
         </div>
 
-        <footer class="bg-dark text-white text-center py-3 mt-auto">
-            © @DateTime.Now.Year - Mi aplicación ASP.NET
+        <footer class="footer text-white text-center py-4 mt-auto">
+            <div class="container">
+                <p class="mb-0">
+                    © @DateTime.Now.Year - Voz del Este | Radio Online. Todos los derechos reservados.
+                </p>
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <a href="#" class="text-white">[Política de Privacidad]</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#" class="text-white">[Términos y Condiciones de Uso]</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#" class="text-white">[Contacto]</a>
+                    </li>
+                </ul>
+            </div>
         </footer>
+
     </div>
 </body>
 
