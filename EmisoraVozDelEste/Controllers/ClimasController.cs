@@ -22,29 +22,34 @@ namespace EmisoraVozDelEste.Controllers
 
         public ActionResult ClimaOnlineVista()
         {
+            bool usarApi = false; 
+
+            if (!usarApi)
+            {
+                ViewBag.MensajeMantenimiento = "El servicio del clima está temporalmente en mantenimiento. Disculpe las molestias.";
+                return View("ClimaEnMantenimiento");
+            }
+
+            // Si usarApi es true, este código se ejecuta (API real)
             string apiKey = "99a62615b949cb6d8a96f76f97c2ff69";
             string ciudad = "Maldonado,UY";
 
-            // URLs de OpenWeather
             string urlActual = $"https://api.openweathermap.org/data/2.5/weather?q={ciudad}&appid={apiKey}&units=metric&lang=es";
             string urlPronostico = $"https://api.openweathermap.org/data/2.5/forecast?q={ciudad}&appid={apiKey}&units=metric&lang=es";
 
             using (var client = new WebClient())
             {
-                // Clima actual
                 string jsonActual = client.DownloadString(urlActual);
                 var climaActual = JsonConvert.DeserializeObject<ClimaActual>(jsonActual);
 
-                // Pronóstico 5 días
                 string jsonPronostico = client.DownloadString(urlPronostico);
                 var clima = ClimaOnline.FromJson(jsonPronostico);
 
                 var hoy = DateTime.Now.Date;
 
-                // Pronóstico del día actual (hoy), luego del momento actual
                 var bloquesHoy = clima.List
                     .Where(x => x.DtTxt.Date == hoy && x.DtTxt > DateTime.Now)
-                    .Take(3) // Mostramos solo los próximos 3 bloques
+                    .Take(3)
                     .ToList();
 
                 var diarios = clima.List

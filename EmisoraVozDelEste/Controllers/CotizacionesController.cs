@@ -18,6 +18,13 @@ namespace EmisoraVozDelEste.Controllers
 
         public async Task<ActionResult> CotizacionesOnline()
         {
+            bool usarApi = false; // Ponelo true cuando quieras usar la API
+
+            if (!usarApi)
+            {
+                ViewBag.MensajeMantenimiento = "El servicio de cotizaciones está temporalmente en mantenimiento. Disculpe las molestias.";
+                return View("CotizacionesEnMantenimiento");
+            }
             string url = $"http://api.currencylayer.com/live?access_key={apiKey}&currencies=UYU,EUR,ARS&source=USD&format=1";
 
             using (HttpClient client = new HttpClient())

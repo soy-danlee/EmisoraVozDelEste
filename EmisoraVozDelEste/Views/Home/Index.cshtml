@@ -118,8 +118,21 @@
                     Escuchá la Voz del Este en Vivo
                     <span class="live-indicator" title="En vivo"></span>
                 </h2>
+                <h5 class="text-center">
+                    @if (ViewBag.ProgramaActual != null)
+                    {
+                        var p = (EmisoraVozDelEste.Models.Programas)ViewBag.ProgramaActual;
+                        <text>En este momento sonando: <a asp-action="Sala"
+                                                          asp-controller="Programas"
+                                                          asp-route-id="@p.Id">@p.Nombre</a></text>
+                    }
+                    else
+                    {
+                        <text>Estamos emitiendo la señal habitual de La Voz del Este. ¡Seguí escuchando nuestra programación continua!</text>
+                    }
+                </h5>
                 <audio controls autoplay class="w-100 mb-4">
-                    <source src="https://icecasthd.net/proxy/azulp/live" type="audio/mpeg">
+                    @*<source src="https://icecasthd.net/proxy/azulp/live" type="audio/mpeg">*@
                     Tu navegador no soporta la reproducción de audio.
                 </audio>
                 <hr />
@@ -142,15 +155,8 @@
                     </ul>
                 </div>
 
-                <!-- Canales de Radio -->
-                <div class="mt-4">
-                    <h4>📻 Canales de Radio</h4>
-                    <div class="d-flex flex-wrap">
-                        <div class="p-2">Canal 1</div>
-                        <div class="p-2">Canal 2</div>
-                        <div class="p-2">Canal 3</div>
-                    </div>
-                </div>
+                
+
                 <!-- Programación Próxima -->
                 <div class="mt-4">
                     <h4>📻 Próximos Programas de Hoy</h4>
@@ -179,7 +185,7 @@
                     </div>
                 </div>
                 <!-- Promotores -->
-                <h3 class="text-center mb-4">🤝 Promotores destacados</h3>
+                <h3 class="text-center mb-4">🤝 Patrocinadores destacados</h3>
 
                 <div class="d-flex justify-content-center">
                     <div class="w-100" style="max-width: 90%;">
