@@ -144,7 +144,7 @@
                         @foreach (var noticia in Model.UltimasNoticias)
                         {
                             <li class="list-group-item hover-glow">
-                                <a href="@Url.Action("Details", "Noticias", new { id = noticia.Id })" style="text-decoration: none;">
+                                <a href="@Url.Action("NoticiasAmpliada", "Noticias", new { id = noticia.Id })" style="text-decoration: none;">
                                     <strong>@noticia.Titulo</strong>
                                     <span class="text-muted float-end">
                                         @(noticia.FechaPublicacion?.ToString("dd/MM/yyyy") ?? "")
