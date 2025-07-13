@@ -9,10 +9,10 @@
         <div class="col-12 col-md-8">
             <div class="card shadow-lg">
                 <div class="card-header text-white" style="background-color: #0a1a2f;">
-                    <h4 class="mb-0"><i class="fas fa-trash-alt me-2"></i> Eliminar Cliente</h4>
+                    <h4 class="mb-0"><i class="fas fa-trash-alt me-2"></i> Eliminar Rol</h4>
                 </div>
                 <div class="card-body">
-                    <h5 class="text-danger mb-4">¿Estás seguro que deseas eliminar este cliente?</h5>
+                    <h5 class="text-danger mb-4">¿Estás seguro que deseas eliminar este rol?</h5>
 
                     @if (!ViewData.ModelState.IsValid)
                     {
@@ -21,9 +21,9 @@
                         </div>
                     }
 
-                <ul class="list-group mb-4">
-                    <li class="list-group-item"><strong>Nombre del rol:</strong> @Html.DisplayFor(model => model.Nombre)</li>
-                </ul>
+                    <ul class="list-group mb-4">
+                        <li class="list-group-item"><strong>Nombre del rol:</strong> @Html.DisplayFor(model => model.Nombre)</li>
+                    </ul>
 
                     @using (Html.BeginForm())
                     {
@@ -31,7 +31,11 @@
 
                         <div class="form-actions no-color">
                             <input type="submit" value="Eliminar" class="btn text-white" style="background-color: #0a1a2f;" />
-                            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
+                            @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-secondary" })
                         </div>
                     }
                 </div>
+            </div>
+        </div>
+    </div>
+</div>

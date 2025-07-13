@@ -28,7 +28,13 @@
                             <dd class="col-sm-8">@Model.Email</dd>
 
                             <dt class="col-sm-4">Rol</dt>
-                            <dd class="col-sm-8">@Model.Roles?.Nombre</dd>
+                            <dd class="col-sm-8">
+                                @(
+                                    Model.Roles is IEnumerable<EmisoraVozDelEste.Models.Roles> coll
+                                    ? string.Join(", ", coll.Select(r => r.Nombre))
+                                    : Model.Roles?.Nombre
+                                )
+                            </dd>
                         </dl>
 
                         <div class="d-flex">

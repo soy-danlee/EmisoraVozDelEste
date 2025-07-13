@@ -75,19 +75,19 @@
                                             <div class="d-grid d-md-flex gap-2">
                                                 @if (permisos.Contains("EditarNoticia"))
                                                 {
-                                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-warning" })
+                                                    @Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-warning" })
                                                     @:
                                                 }
 
                                                 @if (permisos.Contains("DetallesNoticia"))
                                                 {
-                                                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-info text-white" })
+                                                    @Html.ActionLink("Detalles", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-info text-white" })
                                                     @:
                                                 }
 
                                                 @if (permisos.Contains("EliminarNoticia"))
                                                 {
-                                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })
+                                                    @Html.ActionLink("Eliminar", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })
                                                 }
                                             </div>
                                         </td>

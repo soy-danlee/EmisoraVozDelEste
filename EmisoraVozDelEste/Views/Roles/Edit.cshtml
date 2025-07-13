@@ -17,21 +17,21 @@
             {
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(model => model.Id)
-                @Html.HiddenFor(model => model.Nombre) <!-- 🔹 Aquí está la solución -->
+                @Html.HiddenFor(model => model.Nombre) 
 
-                <!-- Título del rol -->
+               
                 <div class="mb-4">
                     <h4 class="fw-bold text-primary">
                         <i class="fas fa-tag me-2"></i>Rol: @Model.Nombre
                     </h4>
                 </div>
 
-                <!-- Buscador de permisos -->
+              
                 <div class="mb-3">
                     <input type="text" class="form-control" id="buscadorPermisos" placeholder="Buscar permisos...">
                 </div>
 
-                <!-- Lista de Permisos -->
+               
                 <div class="mb-4">
                     <label class="form-label fw-bold"><i class="fas fa-key me-1"></i>Permisos asignados</label>
                     <div class="row">
@@ -51,7 +51,7 @@
                     </div>
                 </div>
 
-                <!-- Botones -->
+                
                 <div class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-success">
                         <i class="fas fa-save me-1"></i>Guardar cambios
