@@ -30,7 +30,6 @@ namespace EmisoraVozDelEste.Controllers
                 return View("ClimaEnMantenimiento");
             }
 
-            // Si usarApi es true, este código se ejecuta (API real)
             string apiKey = "99a62615b949cb6d8a96f76f97c2ff69";
             string ciudad = "Maldonado,UY";
 
