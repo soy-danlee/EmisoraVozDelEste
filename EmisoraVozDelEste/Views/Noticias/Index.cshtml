@@ -22,9 +22,9 @@
                 </div>
                 <div class="card-body">
                     <div class="mb-3 d-flex justify-content-end">
-                        @if (permisos.Contains("CrearNoticias"))
+                        @if (permisos.Contains("CrearNoticia"))
                         {
-                            @Html.ActionLink("Crear nueva noticia", "Create", null, new { @class = "btn text-white", style = "background-color: #0a1a2f;" })
+                            @Html.ActionLink("Crear noticia", "Create", null, new { @class = "btn text-white", style = "background-color: #0a1a2f;" })
                         }
 
                     </div>
