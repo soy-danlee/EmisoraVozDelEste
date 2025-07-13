@@ -22,7 +22,7 @@ namespace EmisoraVozDelEste.Controllers
 
         public ActionResult ClimaOnlineVista()
         {
-            bool usarApi = false; 
+            bool usarApi = true; 
 
             if (!usarApi)
             {
