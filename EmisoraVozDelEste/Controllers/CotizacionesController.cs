@@ -18,7 +18,7 @@ namespace EmisoraVozDelEste.Controllers
 
         public async Task<ActionResult> CotizacionesOnline()
         {
-            bool usarApi = false; // Ponelo true cuando quieras usar la API
+            bool usarApi = true; 
 
             if (!usarApi)
             {

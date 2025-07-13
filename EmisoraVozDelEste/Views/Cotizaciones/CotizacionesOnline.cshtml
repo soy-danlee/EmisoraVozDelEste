@@ -4,27 +4,299 @@
 @{
     ViewBag.Title = "Cotizaciones";
 }
+<style>
 
-<h2 class="text-center my-4">Cotizaciones del Dólar (USD)</h2>
+    :root {
+        --primary-blue: #1e40af;
+        --secondary-blue: #3b82f6;
+        --light-blue: #60a5fa;
+        --pale-blue: #dbeafe;
+        --dark-blue: #1e3a8a;
+        --accent-blue: #0ea5e9;
+        --gradient-primary: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        --gradient-secondary: linear-gradient(135deg, #60a5fa 0%, #93c5fd 100%);
+        --gradient-card: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    }
 
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Moneda</th>
-            <th>Valor</th>
-            <th>Fecha</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.TipoMoneda</td>
-                <td>@(item.Valor?.ToString("N6"))</td>
-                <td>@(item.Fecha?.ToString("dd/MM/yyyy HH:mm"))</td>
-            </tr>
+    body {
+        background: var(--gradient-card);
+        min-height: 100vh;
+    }
+
+    /* ---------- ENCABEZADO ---------- */
+    .program-header {
+        background: var(--gradient-primary);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 2rem 2rem;
+        box-shadow: 0 10px 30px rgba(30, 64, 175, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .program-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: float 8s ease-in-out infinite;
         }
-    </tbody>
-</table>
+
+    @@keyframes float {
+        0%, 100% {
+            transform: translateY(0) rotate(0deg);
+        }
+
+        50% {
+            transform: translateY(-20px) rotate(180deg);
+        }
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0;
+        text-shadow: 0 2px 4px rgba(0,0,0,.1);
+        position: relative;
+        z-index: 1;
+    }
+
+    .page-subtitle {
+        font-size: 1.1rem;
+        opacity: .9;
+        margin-top: .5rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* ---------- GRID Y TARJETAS ---------- */
+    .program-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* antes 320px */
+        gap: 1.5rem; /* un poco menos separación */
+        margin-top: 2rem;
+    }
+
+    .program-card {
+        background: white;
+        border-radius: 12px; /* más compacto */
+        overflow: hidden;
+        box-shadow: 0 2px 12px rgba(30, 64, 175, 0.08); /* sombra más sutil */
+        transition: all .3s ease;
+        border: 1px solid var(--pale-blue);
+        height: 100%;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        position: relative;
+    }
+
+        .program-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 30px rgba(30, 64, 175, 0.18);
+            border-color: var(--light-blue);
+        }
+
+        .program-card img {
+            height: 140px; /* antes 200px */
+            width: 100%;
+            object-fit: cover;
+            transition: transform .3s ease;
+            filter: brightness(100%);
+        }
+
+        .program-card:hover img {
+            transform: scale(1.05);
+            filter: brightness(90%);
+        }
+
+        .program-card .card-body {
+            padding: 1rem; /* antes 1.5rem */
+            display: flex;
+            flex-direction: column;
+            gap: .75rem; /* menos espacio vertical */
+        }
+
+        .program-card .card-title {
+            color: var(--dark-blue);
+            font-weight: 700;
+            margin: 0;
+            font-size: 1.05rem; /* antes 1.25rem */
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+    .program-date {
+        color: var(--accent-blue);
+        font-weight: 500;
+        font-size: .85rem; /* ligeramente menor */
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: auto;
+    }
+
+        .program-date::before {
+            content: '📅';
+            font-size: 1rem;
+        }
+
+    .program-badge {
+        position: absolute;
+        top: .75rem;
+        right: .75rem;
+        background: var(--gradient-primary);
+        color: white;
+        padding: 4px 10px; /* antes 6x12 */
+        border-radius: 20px;
+        font-size: .7rem; /* antes .8rem */
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(30, 64, 175, 0.25);
+    }
+
+    .program-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px; /* más fino */
+        background: var(--gradient-secondary);
+        transform: scaleX(0);
+        transition: transform .3s ease;
+    }
+
+    .program-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    /* ---------- UTILITARIOS ---------- */
+    .programas-container {
+        padding: 0;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @@media (max-width: 768px) {
+        .page-title {
+            font-size: 2rem;
+        }
+
+        .program-grid {
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        .program-header {
+            padding: 2rem 0;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .program-header {
+            margin-bottom: 1rem;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+        }
+
+        .program-card .card-body {
+            padding: .9rem;
+        }
+
+        .program-card .card-title {
+            font-size: 1rem;
+        }
+    }
+    /* ---------- TABLA COTIZACIONES ---------- */
+    .cotizaciones-wrapper {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(30, 64, 175, 0.1);
+        border: 1px solid var(--pale-blue);
+        max-width: 900px;
+        margin: 2rem auto;
+    }
+
+    .cotizaciones-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.95rem;
+    }
+
+        .cotizaciones-table thead {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .cotizaciones-table th,
+        .cotizaciones-table td {
+            padding: 0.9rem 1.2rem;
+            text-align: center;
+        }
+
+            .cotizaciones-table th:first-child,
+            .cotizaciones-table td:first-child {
+                text-align: left;
+            }
+
+        .cotizaciones-table tbody tr:nth-child(even) {
+            background: var(--pale-blue);
+        }
+
+        .cotizaciones-table tbody tr:hover {
+            background: rgba(30, 64, 175, 0.08);
+        }
+
+        .cotizaciones-table tbody td {
+            border-top: 1px solid var(--pale-blue);
+        }
+
+    @@media (max-width: 576px) {
+        .cotizaciones-table th,
+        .cotizaciones-table td {
+            padding: 0.7rem 0.8rem;
+            font-size: 0.85rem;
+        }
+    }
+</style>
+<header class="program-header text-center">
+    <h1 class="page-title">Cotizaciones del dólar (USD)</h1>
+    <p class="page-subtitle">Histórico de valores</p>
+</header>
+
+<!-- TABLA -->
+<div class="container programas-container">
+    <div class="cotizaciones-wrapper">
+        <table class="cotizaciones-table">
+            <thead>
+                <tr>
+                    <th>Moneda</th>
+                    <th>Valor</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.TipoMoneda</td>
+                        <td>@(item.Valor?.ToString("N6"))</td>
+                        <td>@(item.Fecha?.ToString("dd/MM/yyyy"))</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
 
 
