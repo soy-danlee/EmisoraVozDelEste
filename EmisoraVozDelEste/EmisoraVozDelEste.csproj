@@ -344,6 +344,7 @@
     <Content Include="Views\Programas\ProgramasCliente.cshtml" />
     <Content Include="Views\Climas\ClimaEnMantenimiento.cshtml" />
     <Content Include="Views\Cotizaciones\CotizacionesEnMantenimiento.cshtml" />
+    <Content Include="Views\Noticias\NoticiasAmpliada.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

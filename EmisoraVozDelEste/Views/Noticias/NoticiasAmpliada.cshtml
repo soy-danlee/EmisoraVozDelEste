@@ -1,0 +1,31 @@
+﻿@model EmisoraVozDelEste.Models.Noticias
+
+@{
+    ViewBag.Title = Model.Titulo;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <article class="bg-white shadow-sm p-4 rounded">
+
+                <h1 class="display-5 mb-3">@Model.Titulo</h1>
+
+                <img src="@Model.Imagen" alt="@Model.Titulo" class="img-fluid rounded mb-4"
+                     style="max-height: 450px; object-fit: cover; width: 100%;" />
+
+                <div class="fs-5 lh-lg" style="white-space: pre-line;">
+                    @Model.Contenido
+                </div>
+
+                <div class="mt-4">
+                    <a href="@Url.Action("NoticiasCliente", "Noticias")" class="btn btn-outline-secondary">
+                        ← Volver a noticias
+                    </a>
+                </div>
+
+            </article>
+        </div>
+    </div>
+</div>

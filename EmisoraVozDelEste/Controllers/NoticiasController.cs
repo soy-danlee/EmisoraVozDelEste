@@ -198,6 +198,13 @@ namespace EmisoraVozDelEste.Controllers
             }
             return View(noticia);
         }
+        public ActionResult NoticiasAmpliada(int id)
+        {
+            var noticia = db.Noticias.FirstOrDefault(n => n.Id == id);
+            if (noticia == null)
+                return HttpNotFound();     
 
+            return View(noticia);      
+        }
     }
 }

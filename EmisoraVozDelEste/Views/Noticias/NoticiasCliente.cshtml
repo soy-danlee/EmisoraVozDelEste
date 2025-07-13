@@ -339,7 +339,7 @@
         <div class="news-grid">
             @foreach (var noticia in Model)
             {
-                <a href="@Url.Action("Details", "Noticias", new { id = noticia.Id })"
+                <a href="@Url.Action("NoticiasAmpliada", "Noticias", new { id = noticia.Id })"
                    target="_blank" rel="noopener noreferrer"
                    class="news-card">
                     <img src="@noticia.Imagen" alt="@noticia.Titulo"

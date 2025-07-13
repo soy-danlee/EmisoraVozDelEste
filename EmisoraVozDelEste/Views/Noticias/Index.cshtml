@@ -76,13 +76,13 @@
                                                 @if (permisos.Contains("EditarNoticia"))
                                                 {
                                                     @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-warning" })
-                                                    @: |
+                                                    @:
                                                 }
 
                                                 @if (permisos.Contains("DetallesNoticia"))
                                                 {
                                                     @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-info text-white" })
-                                                    @: |
+                                                    @:
                                                 }
 
                                                 @if (permisos.Contains("EliminarNoticia"))

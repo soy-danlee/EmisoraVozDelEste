@@ -1,33 +1,45 @@
 ﻿@model EmisoraVozDelEste.Models.Noticias
 
 @{
-    ViewBag.Title = Model.Titulo;
-    Layout = "~/Views/Shared/_Layout.cshtml"; 
+    ViewBag.Title = "Details";
 }
+
+<h2>Details</h2>
 
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <article class="bg-white shadow-sm p-4 rounded">
-
-                <h1 class="display-5 mb-3">@Model.Titulo</h1>
-
-                <img src="@Model.Imagen" alt="@Model.Titulo" class="img-fluid rounded mb-4"
-                     style="max-height: 450px; object-fit: cover; width: 100%;" />
-               
-                <div class="fs-5 lh-lg" style="white-space: pre-line;">
-                    @Model.Contenido
+        <div class="col-12 col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header text-white" style="background-color: #0a1a2f;">
+                    <h4 class="mb-0"><i class="fas fa-info-circle me-2"></i> Detalles de noticias</h4>
                 </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Id)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Id)</dd>
 
-                <div class="mt-4">
-                    <a href="@Url.Action("NoticiasCliente", "Noticias")" class="btn btn-outline-secondary">
-                        ← Volver a noticias
-                    </a>
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Titulo)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Titulo)</dd>
+
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Contenido)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Contenido)</dd>
+
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.FechaPublicacion)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.FechaPublicacion)</dd>
+
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Imagen)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Imagen)</dd>
+                    </dl>
+
+                    <div class="d-grid d-md-flex gap-2 mt-4">
+                        @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning btn-sm" })
+                        @Html.ActionLink("Volver a la Lista", "Index", null, new { @class = "btn text-white btn-sm", style = "background-color: #0a1a2f;" })
+                    </div>
                 </div>
-
-            </article>
+            </div>
         </div>
     </div>
 </div>
+
 
 
