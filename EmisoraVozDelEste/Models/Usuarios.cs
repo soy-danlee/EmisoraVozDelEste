@@ -11,7 +11,7 @@ namespace EmisoraVozDelEste.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
     public partial class Usuarios
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,9 +21,23 @@ namespace EmisoraVozDelEste.Models
         }
     
         public int Id { get; set; }
+        [Required(ErrorMessage = "El usuario es obligatorio")]
+        [StringLength(50, ErrorMessage = "Máximo 50 caracteres")]
+        [Display(Name = "Usuario")]
         public string Nombre { get; set; }
+
+        [Required(ErrorMessage = "El email es obligatorio")]
+        [EmailAddress(ErrorMessage = "Formato de email no válido")]
+        [StringLength(100, ErrorMessage = "Máximo 100 caracteres")]
+        [Display(Name = "Correo electrónico")]
         public string Email { get; set; }
+
+        [Required(ErrorMessage = "La contraseña es obligatoria")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Contraseña")]
         public string Contraseña { get; set; }
+
+        [Required(ErrorMessage = "Debe seleccionar un rol")]
         public int RolId { get; set; }
     
         public virtual Roles Roles { get; set; }

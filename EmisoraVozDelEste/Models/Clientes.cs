@@ -19,17 +19,32 @@ namespace EmisoraVozDelEste.Models
         {
             this.Comentarios = new HashSet<Comentarios>();
         }
-    
+
+        [Display(Name = "Cédula de Identidad")]
+        [Range(1, 99999999, ErrorMessage = "La CI debe ser un número positivo")]
         public int CI { get; set; }
+
+        [Required(ErrorMessage = "El nombre es obligatorio")]
+        [StringLength(50, ErrorMessage = "Máximo 50 caracteres")]
+        [Display(Name = "Nombre")]
         public string Nombre { get; set; }
+
+        [Required(ErrorMessage = "El apellido es obligatorio")]
+        [StringLength(50, ErrorMessage = "Máximo 50 caracteres")]
+        [Display(Name = "Apellido")]
         public string Apellido { get; set; }
+
+        [Required(ErrorMessage = "El email es obligatorio")]
+        [EmailAddress(ErrorMessage = "Formato de email no válido")]
+        [StringLength(100, ErrorMessage = "Máximo 100 caracteres")]
+        [Display(Name = "Correo electrónico")]
         public string Email { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> FechaNacimiento { get; set; }
         public Nullable<int> UsuarioID { get; set; }
-    
+
         public virtual Usuarios Usuarios { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Comentarios> Comentarios { get; set; }
